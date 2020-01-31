@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from flask import Flask, request, json, jsonify, make_response
 from flask_restful import Resource, Api
 from flask_httpauth import HTTPBasicAuth
@@ -15,7 +17,7 @@ def get_users(filename="LISTE_COLLABORATEURS.json"):
 	"""On lit le fichier contenant les données des utilisateurs et on créé leurs identifants"""
 	# TO DO : Changer les données des identifiants : actuellement les identifiants sont :
 	# id:Prénom, mdp:Nom
-	with open(os.path.join("static", "data", filename), "r") as data_file:
+	with open(os.path.join("static", "data", filename), "r", encoding="utf8") as data_file:
 		data = json.load(data_file)
 	users = {user[1]["prenom"]:generate_password_hash(user[1]["nom"]) for user in data.items()}
 	return users
@@ -34,13 +36,13 @@ def verify_password(username, password):
 file_data = "DONNEES_CLIENT.json"
 # fonction de lecture
 def get_data(filename=file_data):
-	with open(os.path.join("static", "data", filename), "r") as data_file:
+	with open(os.path.join("static", "data", filename), "r", encoding="utf8") as data_file:
 		data = json.load(data_file)
 	return data
 
 # fonction d'écriture
 def save_data(data, filename=file_data):
-	with open(os.path.join("static", "data", filename), "w") as data_file:
+	with open(os.path.join("static", "data", filename), "w", encoding="utf8") as data_file:
 		data_file.write(json.dumps(data, indent=4))
 
 
