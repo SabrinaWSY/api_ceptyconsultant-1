@@ -1,0 +1,78 @@
+{
+    "CEPTY_001": {
+        "actif": false,
+        "actionnaire": true,
+        "anciennete": 10,
+        "conge": 15,
+        "fonction": "Directeur des representations vectorielles",
+        "id": "CEPTY_001",
+        "mise_a_jour": "2017-05-06 11:25:11.827000",
+        "missions": [
+            "Bruxelle",
+            "Paris",
+            "Pakistan"
+        ],
+        "nom": "Mikolov",
+        "prenom": "Thomas"
+    },
+    "CEPTY_002": {
+        "actif": true,
+        "actionnaire": false,
+        "anciennete": 20,
+        "conge": 14,
+        "fonction": "Chef service mat\u00e9riel informatique",
+        "id": "CEPTY_002",
+        "mise_a_jour": "2011-01-05 06:20:31.527000",
+        "missions": [
+            "Paris"
+        ],
+        "nom": "Bergier",
+        "prenom": "Francine"
+    },
+    "CEPTY_003": {
+        "actif": true,
+        "actionnaire": false,
+        "anciennete": 3,
+        "conge": 5,
+        "fonction": "Cuisinier en chef",
+        "id": "CEPTY_003",
+        "mise_a_jour": "2016-11-06 10:20:34.527000",
+        "missions": [
+            "Londre",
+            "Tunis"
+        ],
+        "nom": "Taken",
+        "prenom": "Georges"
+    },
+    "CEPTY_004": {
+        "actif": true,
+        "actionnaire": false,
+        "anciennete": 9,
+        "conge": 10,
+        "fonction": "Chef service juridique",
+        "id": "CEPTY_004",
+        "mise_a_jour": "2017-12-26 16:20:11.527000",
+        "missions": [
+            "Berlin",
+            "Paris",
+            "NewYork"
+        ],
+        "nom": "Gate",
+        "prenom": "Roland"
+    },
+    "CEPTY_005": {
+        "actif": true,
+        "actionnaire": true,
+        "anciennete": 3,
+        "conge": 14,
+        "fonction": "Directrice normalisation lexicale",
+        "id": "CEPTY_005",
+        "mise_a_jour": "2018-02-26 13:50:41.527000",
+        "missions": [
+            "NewYork",
+            "Douala"
+        ],
+        "nom": "Fokwe",
+        "prenom": "Yvette"
+    }
+}
