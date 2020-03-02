@@ -6,7 +6,8 @@ from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from flask import render_template
-from flask import Response
+from flask import Response, redirect
+import datetime
 
 app = Flask(__name__)
 api = Api(app)
@@ -21,7 +22,7 @@ def get_users(filename="LISTE_COLLABORATEURS.json"):
 	# id:Prénom, mdp:Nom
 	# Ceci est seulement pour faciliter la démonstration mais en production les mot de passe
 	# seront beaucoup plus sécurisés
-	with open(os.path.join("static", "data", filename), "r", encoding="utf8") as data_file:
+	with open(os.path.join("data", filename), "r", encoding="utf8") as data_file:
 		data = json.load(data_file)
 	users = {user[1]["prenom"]:generate_password_hash(user[1]["nom"]) for user in data.items()}
 	return users
@@ -40,17 +41,17 @@ def verify_password(username, password):
 file_data = "DONNEES_CLIENT.json"
 # fonction de lecture
 def get_data(filename=file_data):
-	with open(os.path.join("static", "data", filename), "r", encoding="utf8") as data_file:
+	with open(os.path.join("data", filename), "r", encoding="utf8") as data_file:
 		data = json.load(data_file)
 	return data
 
 # fonction d'écriture
 def save_data(data, filename=file_data):
-	with open(os.path.join("static", "data", filename), "w", encoding="utf8") as data_file:
+	with open(os.path.join("data", filename), "w", encoding="utf8") as data_file:
 		data_file.write(json.dumps(data, indent=4))
 
 
-class Get_data(Resource):
+class Login(Resource):
 	"""retourne le contenu du fichier json"""
 	#@auth.login_required
 	def get(self):
@@ -60,11 +61,33 @@ class Get_data(Resource):
 
 	def post(self):
 		info = request.form
-		print(info)
+		return redirect("/ceptyconsultant.local/data", code=302)
 
-class Add_data(Resource):
-	"""Ajoute des données dans le fichier json"""
-	@auth.login_required
+
+class Data(Resource):
+	"""retourne le contenu du fichier json"""
+	def get(self, contrib_name, public_id=None):
+		data = get_data()
+		result = []
+		if public_id == None:
+			for d in data["contributions"]["data"]:
+				if d["contrib_name"] == contrib_name: 
+					result.append(d)
+			if len(result) == 0:
+				res = make_response({"ERROR":"contrib_name introuvable"}, 404)
+			else : res = make_response({"data":result} , 200)
+			return res
+
+		else :
+			for d in data["contributions"]["data"]:
+				if d["contrib_name"] == contrib_name and d["public_id"] == public_id: 
+					result.append(d)
+			if len(result) == 0:
+				res = make_response({"ERROR":"contrib_name ou public_id introuvable"}, 404)
+			else : res = make_response({"data":result} , 200)
+			return res
+
+
 	def put(self):
 		data = get_data()
 		data_add = request.json
@@ -73,16 +96,16 @@ class Add_data(Resource):
 		# Actuellement la seule condition est l'article_id
 		list_id = [d["article_id"] for d in data["contributions"]["data"]]
 		if data_add["article_id"] in list_id:
-			res = make_response(jsonify({"error": "article_id already exists"}), 400)
+			res = make_response(jsonify({"ERROR": "article_id existe déjà"}), 400)
 			return res
 		else:
+			time = datetime.datetime.utcnow()
+			data_add['last_update'] = time
 			data["contributions"]["data"].append(data_add)
 			save_data(data)
-			return jsonify(data_add)
+			res = make_response(jsonify({"OK": "Article ajouté avec succès"}), 200)
+			return res
 
-class Edit_data(Resource):
-	"""Modifie des données dans le fichier json"""
-	@auth.login_required
 	def post(self):
 		data = get_data()
 		data_edit = request.json
@@ -90,17 +113,16 @@ class Edit_data(Resource):
 		for n, d in enumerate(data["contributions"]["data"]):
 			if d["article_id"] == article_id:
 				for key, value in data_edit.items():
+					time = datetime.datetime.utcnow()
 					d[key] = value
+					d["last_update"] = time
 				save_data(data)
+				make_response(jsonify({"OK": "Données modifées avec succès"}), 200)
 				return jsonify(d)
 		else:
-			res = make_response(jsonify({"error": "article_id not found"}), 404)
+			res = make_response(jsonify({"ERROR": "Article non trouvé"}), 404)
 			return res
 
-class Del_data(Resource):
-	"""Supprime des données à partir de l'id de l'article donné en paramètre"""
-	# TO DO : Proposer d'autres id, ex : dico_id, etc
-	@auth.login_required
 	def delete(self):
 		data = get_data()
 		article_id = request.args.get('article_id')
@@ -108,17 +130,15 @@ class Del_data(Resource):
 			if d["article_id"] == article_id:
 				del data["contributions"]["data"][n]
 				save_data(data)
-				res = make_response(jsonify({}), 204)
+				res = make_response(jsonify({"OK": "Article supprimé avec succés"}), 200)
 				return res
 		else:
-			res = make_response(jsonify({"error": "article_id not found"}), 404)
+			res = make_response(jsonify({"ERROR": "Article non trouvé"}), 404)
 			return res
 
-
-api.add_resource(Get_data, "/","/ceptyconsultant.local/", "/authentification")
-api.add_resource(Add_data, "/ceptyconsultant.local/")
-api.add_resource(Edit_data, "/ceptyconsultant.local/")
-api.add_resource(Del_data, "/ceptyconsultant.local/")
+api.add_resource(Login, "/","/ceptyconsultant.local/", "/ceptyconsultant.local/authentification")
+api.add_resource(Data, "/ceptyconsultant.local/data", "/ceptyconsultant.local/data/<string:contrib_name>",
+						"/ceptyconsultant.local/data/<string:contrib_name>/<string:public_id>")
 
 
 if __name__ == '__main__':
