@@ -141,9 +141,9 @@ class Data(Resource):
 			res = make_response(jsonify({"ERROR": "Article non trouvé"}), 404)
 			return res
 
-api.add_resource(Login, "/","/ceptyconsultant.local/", "/ceptyconsultant.local/authentification")
-api.add_resource(Data, "/ceptyconsultant.local/data", "/ceptyconsultant.local/data/<string:contrib_name>",
-						"/ceptyconsultant.local/data/<string:contrib_name>/<string:public_id>")
+api.add_resource(Login, "/", "/authentification")
+api.add_resource(Data, "/data", "/data/<string:contrib_name>",
+						"/data/<string:contrib_name>/<string:public_id>")
 
 
 if __name__ == '__main__':
