@@ -66,10 +66,15 @@ class Login(Resource):
 
 class Data(Resource):
 	"""retourne le contenu du fichier json"""
-	def get(self, contrib_name, public_id=None):
+	def get(self, contrib_name=None, public_id=None):
 		data = get_data()
 		result = []
-		if public_id == None:
+		if contrib_name == None and public_id == None:
+			res = make_response(jsonify({"WARNING":"Accès refusé"}) , 200)
+			return res
+
+		elif public_id == None:
+
 			for d in data["contributions"]["data"]:
 				if d["contrib_name"] == contrib_name: 
 					result.append(d)
