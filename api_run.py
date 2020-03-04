@@ -31,7 +31,7 @@ def get_users(filename="LISTE_COLLABORATEURS.json"):
 
 users = get_users()
 key = 'ceptyconsultant'
-def get_token(username):
+def make_token(username):
 		""" Génerer le Auth Token """
 		try:
 			token = jwt.encode({"username": username, 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, key, algorithm='HS256')
@@ -68,16 +68,19 @@ def save_data(data, filename=file_data):
 		data_file.write(json.dumps(data, indent=4))
 
 tokens = []
-# global token 
-# global username 
-# token = ""
-# username = ""
+global token 
+global username 
+token = ""
+username = ""
 
 class Login(Resource):
+
+	# token = ""
+	# username = ""
 	"""retourne le contenu du fichier json"""
-	def __init__(self,token,username):
-		self.token = token
-		self.username = username
+	# def __init__(self):
+	# 	self.token = ""
+	# 	self.username = ""
 	#@auth.login_required
 	def get(self):
 		render_login = render_template("index.html")
@@ -86,27 +89,28 @@ class Login(Resource):
 
 	def post(self):
 		info = request.form
-		self.username = info["username"]
+		username = info["username"]
 		#print(username)
 		if verify_password(info["username"],info["password"]):
-			self.token = get_token(info["username"])
-			#token = token.decode('UTF-8')
+			token = make_token(info["username"])
+			token = token.decode('UTF-8')
 			tokens.append(token)
 			#print(token)
 			#return jsonify({'token à utiliser : ': token.decode('UTF-8')})
 			return redirect("/ceptyconsultant.local/data", code=302)
 		else:
 			return make_response(jsonify({"ERREUR":"Username ou mot de passe incorrect!"}) , 400)
+	
 
 
 class Data(Resource):
-	def __init__(self):
-	 super().__init__()
+	
 	"""retourne le contenu du fichier json"""
 	def get(self, contrib_name=None, public_id=None):
 		data = get_data()
 		result = []
-		print(verify_token(Login.token))
+		print("token: "+token)
+		#print(verify_token(token))
 		#if verify_token(token) == username:
 		if contrib_name == None and public_id == None:
 			res = make_response(jsonify({"WARNING":"Accès refusé pour le moment"}) , 200)
@@ -183,9 +187,9 @@ class Data(Resource):
 			res = make_response(jsonify({"ERROR": "Article non trouvé"}), 404)
 			return res
 
-api.add_resource(Login, "/", "/authentification")
-api.add_resource(Data, "/data", "/data/<string:contrib_name>",
-						"/data/<string:contrib_name>/<string:public_id>")
+api.add_resource(Login, "/","/ceptyconsultant.local/", "/ceptyconsultant.local/authentification")
+api.add_resource(Data, "/ceptyconsultant.local/data", "/ceptyconsultant.local/data/<string:contrib_name>",
+						"/ceptyconsultant.local/data/<string:contrib_name>/<string:public_id>")
 
 
 if __name__ == '__main__':
