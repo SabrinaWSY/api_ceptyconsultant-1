@@ -1,5 +1,3 @@
-# _ProjetM2_Techniques_Web
-Projet pour cours Techniques Web TAL INALCO M2
+Projet pour le cours *Techniques Web* M2 Plurital INALCO
 
-# Problématique
-Mettre en place un serveur back-end et un client front-end
+Mettre en place un serveur (back-end) et un client (front-end)
