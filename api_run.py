@@ -8,6 +8,8 @@ import os
 from flask import render_template
 from flask import Response, redirect
 import datetime
+import jwt
+import json
 
 app = Flask(__name__)
 api = Api(app)
@@ -26,15 +28,30 @@ def get_users(filename="LISTE_COLLABORATEURS.json"):
 		data = json.load(data_file)
 	users = {user[1]["prenom"]:generate_password_hash(user[1]["nom"]) for user in data.items()}
 	return users
+
 users = get_users()
+key = 'ceptyconsultant'
+def get_token(username):
+		""" Génerer le Auth Token """
+		try:
+			token = jwt.encode({"username": username, 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, key, algorithm='HS256')
+			print("token generated")
+			return(token)
+		except jwt.ExpiredSignatureError:
+			return("token expired!")
 
+def verify_token(token):
+	""" Décoder le Auth Token pour vérifier si le username se trouve dans la liste des utilisateurs """
+	decoded = jwt.decode(token, key, algorithms='HS256')
+	return decoded["username"]
 
-@auth.verify_password
+#@auth.verify_password
 def verify_password(username, password):
 	"""On vérifie que les iddentifiants de l'utilisateur sont corrects"""
 	if username in users:
 		return check_password_hash(users[username], password)
 	return False
+
 
 #========================================================================
 
@@ -50,9 +67,17 @@ def save_data(data, filename=file_data):
 	with open(os.path.join("data", filename), "w", encoding="utf8") as data_file:
 		data_file.write(json.dumps(data, indent=4))
 
+tokens = []
+# global token 
+# global username 
+# token = ""
+# username = ""
 
 class Login(Resource):
 	"""retourne le contenu du fichier json"""
+	def __init__(self,token,username):
+		self.token = token
+		self.username = username
 	#@auth.login_required
 	def get(self):
 		render_login = render_template("index.html")
@@ -61,16 +86,30 @@ class Login(Resource):
 
 	def post(self):
 		info = request.form
-		return redirect("/ceptyconsultant.local/data", code=302)
+		self.username = info["username"]
+		#print(username)
+		if verify_password(info["username"],info["password"]):
+			self.token = get_token(info["username"])
+			#token = token.decode('UTF-8')
+			tokens.append(token)
+			#print(token)
+			#return jsonify({'token à utiliser : ': token.decode('UTF-8')})
+			return redirect("/ceptyconsultant.local/data", code=302)
+		else:
+			return make_response(jsonify({"ERREUR":"Username ou mot de passe incorrect!"}) , 400)
 
 
 class Data(Resource):
+	def __init__(self):
+	 super().__init__()
 	"""retourne le contenu du fichier json"""
 	def get(self, contrib_name=None, public_id=None):
 		data = get_data()
 		result = []
+		print(verify_token(Login.token))
+		#if verify_token(token) == username:
 		if contrib_name == None and public_id == None:
-			res = make_response(jsonify({"WARNING":"Accès refusé"}) , 200)
+			res = make_response(jsonify({"WARNING":"Accès refusé pour le moment"}) , 200)
 			return res
 
 		elif public_id == None:
@@ -91,6 +130,9 @@ class Data(Resource):
 				res = make_response({"ERROR":"contrib_name ou public_id introuvable"}, 404)
 			else : res = make_response({"data":result} , 200)
 			return res
+		# else:
+		# 	res = make_response(jsonify({"ERROR":"Token non valide!"}) , 200)
+		# 	return res
 
 
 	def put(self):
