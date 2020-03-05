@@ -79,9 +79,8 @@ class Login(Resource):
 		username = info["username"]
 		if verify_password(info["username"],info["password"]):
 			token = make_token(info["username"])
-			token = token.decode('UTF-8')
 			#print(token)
-			return {'token à utiliser : ': token.decode('UTF-8')}
+			return {'Token': token.decode('UTF-8')}
 			#return redirect("/data", code=302)
 		else:
 			return jsonify({"ERREUR":"Username ou mot de passe incorrect!"}) , 400
@@ -148,8 +147,8 @@ class Data(Resource):
 					d[key] = value
 					d["last_update"] = time
 				save_data(data)
-				d = {"OK": "Données modifées avec succès",""}, 200
-				return d
+				res = {"OK": "Données modifées avec succès"}, 200
+				return res
 			res = {"ERROR": "Article non trouvé"}, 404
 			return res
 
