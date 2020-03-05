@@ -10,10 +10,20 @@ from flask import Response, redirect
 import datetime
 import jwt
 import json
+from functools import wraps
 
 app = Flask(__name__)
 api = Api(app)
 auth = HTTPBasicAuth()
+
+
+class User:
+	def __init__(self, cepty_id:str, username:str, password):
+		self.id = cepty_id
+		self.username = username
+		self.password = password
+
+
 
 #======================================================================
 # Gestion des identifiants des utilisateurs
@@ -26,15 +36,26 @@ def get_users(filename="LISTE_COLLABORATEURS.json"):
 	# seront beaucoup plus sécurisés
 	with open(os.path.join("data", filename), "r", encoding="utf8") as data_file:
 		data = json.load(data_file)
-	users = {user[1]["prenom"]:generate_password_hash(user[1]["nom"]) for user in data.items()}
+	#users = {user[1]["prenom"]:generate_password_hash(user[1]["nom"]) for user in data.items()}
+	users = []
+	for user in data.values():
+		user = User(user["id"], user["prenom"], generate_password_hash(user["nom"]))
+		users.append(user)
 	return users
 
 users = get_users()
 key = 'ceptyconsultant'
-def make_token(username):
+def make_token(user):
 		""" Génerer le Auth Token """
 		try:
-			token = jwt.encode({"username": username, 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, key, algorithm='HS256')
+			token = jwt.encode(
+				{
+					"id": user.id,
+					"exp": datetime.datetime.utcnow()+\
+					datetime.timedelta(minutes=30)
+				},
+			key, algorithm='HS256')
+
 			print("token generated")
 			return token
 		except jwt.ExpiredSignatureError:
@@ -46,16 +67,44 @@ def verify_token(token):
 	return decoded["username"]
 
 
-def verify_password(username, password):
+def verify_password(username:str, password:str):
 	"""On vérifie que les iddentifiants de l'utilisateur sont corrects"""
-	if username in users:
-		return check_password_hash(users[username], password)
-	return False
+	for user in users:
+		if user.username == username:
+			if check_password_hash(user.password, password): 
+				return user
+		return False
+	
+# =====================================================================
+
+
+def token_required(f):
+	@wraps(f)
+	def decorator(*args, **kwargs):
+		token = None
+		if 'x-access-tokens' in request.headers:
+			token = request.headers['x-access-tokens']
+		if not token:
+			return {'message': 'a valid token is missing'}
+		try:
+			data = jwt.decode(token, key)
+			current_user = data["id"]
+			#current_user = Users.query.filter_by(public_id=data['public_id']).first()
+			#current_user = Users.query.filter_by(public_id=data['public_id']).first()
+
+		except:
+			return {'message': 'token is invalid'}
+		return f(current_user, *args, **kwargs)
+	return decorator
+
+
 
 #========================================================================
 
 file_data = "DONNEES_CLIENT.json"
 # fonction de lecture
+
+
 def get_data(filename=file_data):
 	with open(os.path.join("data", filename), "r", encoding="utf8") as data_file:
 		data = json.load(data_file)
@@ -77,13 +126,14 @@ class Login(Resource):
 	def post(self):
 		info = request.form
 		username = info["username"]
-		if verify_password(info["username"],info["password"]):
-			token = make_token(info["username"])
+		user = verify_password(info["username"],info["password"])
+		if user:
+			token = make_token(user)
 			#print(token)
 			return {'Token': token.decode('UTF-8')}
 			#return redirect("/data", code=302)
 		else:
-			return jsonify({"ERREUR":"Username ou mot de passe incorrect!"}) , 400
+			return {"ERREUR":"Username ou mot de passe incorrect!"}, 400
 	
 
 
@@ -117,8 +167,8 @@ class Data(Resource):
 			return res
 
 
-
-	def put(self):
+	@token_required
+	def put(self, current_user):
 		data = get_data()
 		data_add = request.json
 		# TODO Ajouter des conditions pour vérifier que les données entrées
