@@ -36,22 +36,21 @@ def make_token(username):
 		try:
 			token = jwt.encode({"username": username, 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=30)}, key, algorithm='HS256')
 			print("token generated")
-			return(token)
+			return token
 		except jwt.ExpiredSignatureError:
-			return("token expired!")
+			return "token expired!"
 
 def verify_token(token):
-	""" Décoder le Auth Token pour vérifier si le username se trouve dans la liste des utilisateurs """
+	"""Décoder le Auth Token pour vérifier si le username se trouve dans la liste des utilisateurs """
 	decoded = jwt.decode(token, key, algorithms='HS256')
 	return decoded["username"]
 
-#@auth.verify_password
+
 def verify_password(username, password):
 	"""On vérifie que les iddentifiants de l'utilisateur sont corrects"""
 	if username in users:
 		return check_password_hash(users[username], password)
 	return False
-
 
 #========================================================================
 
@@ -67,21 +66,9 @@ def save_data(data, filename=file_data):
 	with open(os.path.join("data", filename), "w", encoding="utf8") as data_file:
 		data_file.write(json.dumps(data, indent=4))
 
-tokens = []
-global token 
-global username 
-token = ""
-username = ""
 
 class Login(Resource):
-
-	# token = ""
-	# username = ""
 	"""retourne le contenu du fichier json"""
-	# def __init__(self):
-	# 	self.token = ""
-	# 	self.username = ""
-	#@auth.login_required
 	def get(self):
 		render_login = render_template("index.html")
 		resp = Response(render_login, status=200, content_type="text/html")
@@ -90,16 +77,14 @@ class Login(Resource):
 	def post(self):
 		info = request.form
 		username = info["username"]
-		#print(username)
 		if verify_password(info["username"],info["password"]):
 			token = make_token(info["username"])
 			token = token.decode('UTF-8')
-			tokens.append(token)
 			#print(token)
-			#return jsonify({'token à utiliser : ': token.decode('UTF-8')})
-			return redirect("/ceptyconsultant.local/data", code=302)
+			return {'token à utiliser : ': token.decode('UTF-8')}
+			#return redirect("/data", code=302)
 		else:
-			return make_response(jsonify({"ERREUR":"Username ou mot de passe incorrect!"}) , 400)
+			return jsonify({"ERREUR":"Username ou mot de passe incorrect!"}) , 400
 	
 
 
@@ -109,11 +94,8 @@ class Data(Resource):
 	def get(self, contrib_name=None, public_id=None):
 		data = get_data()
 		result = []
-		print("token: "+token)
-		#print(verify_token(token))
-		#if verify_token(token) == username:
 		if contrib_name == None and public_id == None:
-			res = make_response(jsonify({"WARNING":"Accès refusé pour le moment"}) , 200)
+			res = {"WARNING":"Accès refusé pour le moment"}, 200
 			return res
 
 		elif public_id == None:
@@ -122,8 +104,8 @@ class Data(Resource):
 				if d["contrib_name"] == contrib_name: 
 					result.append(d)
 			if len(result) == 0:
-				res = make_response({"ERROR":"contrib_name introuvable"}, 404)
-			else : res = make_response({"data":result} , 200)
+				res = {"ERROR":"contrib_name introuvable"}, 404
+			else : res = {"data":result}, 200
 			return res
 
 		else :
@@ -131,12 +113,10 @@ class Data(Resource):
 				if d["contrib_name"] == contrib_name and d["public_id"] == public_id: 
 					result.append(d)
 			if len(result) == 0:
-				res = make_response({"ERROR":"contrib_name ou public_id introuvable"}, 404)
-			else : res = make_response({"data":result} , 200)
+				res = {"ERROR":"contrib_name ou public_id introuvable"}, 404
+			else : res = {"data":result}, 200
 			return res
-		# else:
-		# 	res = make_response(jsonify({"ERROR":"Token non valide!"}) , 200)
-		# 	return res
+
 
 
 	def put(self):
@@ -147,14 +127,14 @@ class Data(Resource):
 		# Actuellement la seule condition est l'article_id
 		list_id = [d["article_id"] for d in data["contributions"]["data"]]
 		if data_add["article_id"] in list_id:
-			res = make_response(jsonify({"ERROR": "article_id existe déjà"}), 400)
+			res = {"ERROR": "article_id existe déjà"}, 400
 			return res
 		else:
 			time = datetime.datetime.utcnow()
 			data_add['last_update'] = time
 			data["contributions"]["data"].append(data_add)
 			save_data(data)
-			res = make_response(jsonify({"OK": "Article ajouté avec succès"}), 200)
+			res = {"OK": "Article ajouté avec succès"}, 200
 			return res
 
 	def post(self):
@@ -168,10 +148,9 @@ class Data(Resource):
 					d[key] = value
 					d["last_update"] = time
 				save_data(data)
-				make_response(jsonify({"OK": "Données modifées avec succès"}), 200)
-				return jsonify(d)
-		else:
-			res = make_response(jsonify({"ERROR": "Article non trouvé"}), 404)
+				d = {"OK": "Données modifées avec succès",""}, 200
+				return d
+			res = {"ERROR": "Article non trouvé"}, 404
 			return res
 
 	def delete(self):
@@ -181,10 +160,10 @@ class Data(Resource):
 			if d["article_id"] == article_id:
 				del data["contributions"]["data"][n]
 				save_data(data)
-				res = make_response(jsonify({"OK": "Article supprimé avec succés"}), 200)
+				res = {"OK": "Article supprimé avec succés"}, 200
 				return res
 		else:
-			res = make_response(jsonify({"ERROR": "Article non trouvé"}), 404)
+			res = {"ERROR": "Article non trouvé"}, 404
 			return res
 
 api.add_resource(Login, "/", "/authentification")
