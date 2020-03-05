@@ -130,7 +130,7 @@ class Data(Resource):
 			return res
 		else:
 			time = datetime.datetime.utcnow()
-			data_add['last_update'] = time
+			data_add['last_update'] = str(time)
 			data["contributions"]["data"].append(data_add)
 			save_data(data)
 			res = {"OK": "Article ajouté avec succès"}, 200
@@ -143,14 +143,14 @@ class Data(Resource):
 		for n, d in enumerate(data["contributions"]["data"]):
 			if d["article_id"] == article_id:
 				for key, value in data_edit.items():
-					time = datetime.datetime.utcnow()
 					d[key] = value
-					d["last_update"] = time
+				time = datetime.datetime.utcnow()
+				d["last_update"] = str(time)
 				save_data(data)
 				res = {"OK": "Données modifées avec succès"}, 200
-				return res
-			res = {"ERROR": "Article non trouvé"}, 404
-			return res
+			else : 
+				res = {"ERROR": "Article non trouvé"}, 404
+		return res
 
 	def delete(self):
 		data = get_data()
