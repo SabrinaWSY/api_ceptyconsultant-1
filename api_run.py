@@ -1,21 +1,17 @@
 # coding: utf-8
 
-from flask import Flask, request, json, jsonify, make_response
+from flask import Flask, request, json, jsonify, make_response, Response, redirect
 from flask_restful import Resource, Api
-from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
 import os
-from flask import render_template
-from flask import Response, redirect
 import datetime
 import jwt
 import json
-from functools import wraps
+
 
 app = Flask(__name__)
 api = Api(app)
-auth = HTTPBasicAuth()
-
 
 
 #======================================================================
@@ -191,7 +187,7 @@ class Data(Resource):
 			return res
 		else:
 			time = datetime.datetime.utcnow()
-			data_add['last_update'] = str(time)
+			data_add["last_update"] = str(time)
 			data["contributions"]["data"].append(data_add)
 			save_data(data)
 			res = {"OK": "Article ajouté avec succès"}, 200

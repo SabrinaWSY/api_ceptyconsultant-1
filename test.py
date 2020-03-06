@@ -1,14 +1,14 @@
 import requests
 
 
-url = 'http://www.api.ceptyconsultant.local'
+url = 'https://www.api.ceptyconsultant.localhost'
 
 
 # SANS LOGIN =======================================
 
 # GET
 # accéder aux données
-r = requests.get(url + '/data/a')
+r = requests.get(url + '/data/a', verify=False)
 #print(r.json())
 assert r.json() == {'message': 'token manquant'}
 
@@ -16,7 +16,7 @@ assert r.json() == {'message': 'token manquant'}
 # DELETE
 # Supprimer des données
 params = {'article_id': '93ecdcd3-c570-4891-94ac-e4c7d449a7bc'}
-r = requests.delete(url + '/data', params=params)
+r = requests.delete(url + '/data', params=params, verify=False)
 #print(r.json())
 assert r.json() == {'message': 'token manquant'}
 
@@ -36,7 +36,7 @@ contrib = {
     "user_name": "Bergier",
     "validate": True
 }
-r = requests.put(url + '/data', json=contrib )
+r = requests.put(url + '/data', json=contrib, verify=False)
 #print(r.json())
 assert r.json() == {'message': 'token manquant'}
 
@@ -44,7 +44,7 @@ assert r.json() == {'message': 'token manquant'}
 
 # OBTENIR LE TOKEN ================================
 # login et obtenir le token
-r = requests.post(url + '/login', json={"username":"Thomas", "password":"Mikolov"})
+r = requests.post(url + '/login', json={"username":"Thomas", "password":"Mikolov"}, verify=False)
 assert "Token" in r.json()
 token = r.json()["Token"]
 headers = { 'x-access-tokens' : token }
@@ -54,14 +54,14 @@ headers = { 'x-access-tokens' : token }
 
 # GET
 # accéder aux données
-r = requests.get(url + '/data/a', headers=headers)
+r = requests.get(url + '/data/a', headers=headers, verify=False)
 assert 'data' in r.json()
 
 # DELETE
 # supprimer des données
 params = {'article_id': '93ecdcd3-c570-4891-94ac-e4c7d449a7bc'}
 headers = { 'x-access-tokens' : token }
-r = requests.delete(url + '/data', headers=headers, params=params)
+r = requests.delete(url + '/data', headers=headers, params=params, verify=False)
 #print(r.json())
 assert r.json() == {'OK': 'Article supprimé avec succés'}
 
@@ -84,6 +84,8 @@ contrib = {
 }
 
 headers = { 'x-access-tokens' : token }
-r = requests.put(url + '/data', headers=headers, json=contrib )
+r = requests.put(url + '/data', headers=headers, json=contrib, verify=False )
 #print(r.json())
 assert r.json() == {'OK': 'Article ajouté avec succès'}
+
+print("--> test success !")
