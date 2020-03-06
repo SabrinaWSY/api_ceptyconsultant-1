@@ -1,6 +1,6 @@
 import requests
 
-url = 'http://www.ceptyconsultant.localhost/'
+url = 'http://www.api.ceptyconsultant.local'
 
 # accéder aux données sans login
 r = requests.get(url + '/data/a')
