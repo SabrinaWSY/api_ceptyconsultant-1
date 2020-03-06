@@ -1,7 +1,7 @@
 import requests
 
-url = 'http://www.api.ceptyconsultant.local/'
 
+url = 'http://www.api.ceptyconsultant.local'
 
 
 # SANS LOGIN =======================================
