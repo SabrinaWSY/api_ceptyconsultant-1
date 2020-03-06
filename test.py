@@ -1,7 +1,7 @@
+#!/home/rochet/Logiciels/anaconda3/bin/python3
 import requests
 
-
-url = 'https://www.api.ceptyconsultant.localhost'
+url = 'https://api.ceptyconsultant.localhost'
 
 
 # SANS LOGIN =======================================
