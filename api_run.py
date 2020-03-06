@@ -17,58 +17,54 @@ api = Api(app)
 auth = HTTPBasicAuth()
 
 
+
+#======================================================================
+# Gestion des identifiants des utilisateurs
 class User:
+	"Une utilisateur avec son id, son nom d'utilisateur, et son mot de passe"
 	def __init__(self, cepty_id:str, username:str, password):
 		self.id = cepty_id
 		self.username = username
 		self.password = password
 
 
-
-#======================================================================
-# Gestion des identifiants des utilisateurs
-
 def get_users(filename="LISTE_COLLABORATEURS.json"):
-	"""On lit le fichier contenant les données des utilisateurs et on créé leurs identifants"""
-	# TO DO : Changer les données des identifiants : actuellement les identifiants sont :
-	# id:Prénom, mdp:Nom
-	# Ceci est seulement pour faciliter la démonstration mais en production les mot de passe
-	# seront beaucoup plus sécurisés
+	"""Lit le fichier contenant les données des utilisateurs et créé leurs identifants"""
 	with open(os.path.join("data", filename), "r", encoding="utf8") as data_file:
 		data = json.load(data_file)
-	#users = {user[1]["prenom"]:generate_password_hash(user[1]["nom"]) for user in data.items()}
 	users = []
 	for user in data.values():
 		user = User(user["id"], user["prenom"], generate_password_hash(user["nom"]))
 		users.append(user)
 	return users
+	# [User("cepty_001", "Bernard", "*******"), etc.]
 
 users = get_users()
+
+
 key = 'ceptyconsultant'
 def make_token(user):
-		""" Génerer le Auth Token """
+		"""Génère le Auth Token """
+		encode_params = { 
+			"id": user.id,
+			"exp": datetime.datetime.utcnow()+\
+			datetime.timedelta(minutes=30)
+		}
 		try:
-			token = jwt.encode(
-				{
-					"id": user.id,
-					"exp": datetime.datetime.utcnow()+\
-					datetime.timedelta(minutes=30)
-				},
-			key, algorithm='HS256')
-
-			print("token generated")
+			token = jwt.encode(encode_params, key, algorithm='HS256')
+			# print("token generated")
 			return token
 		except jwt.ExpiredSignatureError:
 			return "token expired!"
 
 def verify_token(token):
-	"""Décoder le Auth Token pour vérifier si le username se trouve dans la liste des utilisateurs """
+	"""Décode le Auth Token"""
 	decoded = jwt.decode(token, key, algorithms='HS256')
 	return decoded["username"]
 
 
 def verify_password(username:str, password:str):
-	"""On vérifie que les iddentifiants de l'utilisateur sont corrects"""
+	"""Vérifie que les iddentifiants de l'utilisateur sont corrects"""
 	for user in users:
 		if user.username == username:
 			if check_password_hash(user.password, password): 
@@ -85,15 +81,13 @@ def token_required(f):
 		if 'x-access-tokens' in request.headers:
 			token = request.headers['x-access-tokens']
 		if not token:
-			return {'message': 'a valid token is missing'}
+			return {'message': 'token manquant'}
 		try:
 			data = jwt.decode(token, key)
 			current_user = data["id"]
-			#current_user = Users.query.filter_by(public_id=data['public_id']).first()
-			#current_user = Users.query.filter_by(public_id=data['public_id']).first()
-
+			#print(current_user)
 		except:
-			return {'message': 'token is invalid'}
+			return {'message': 'token invalide'}
 		return f(current_user, *args, **kwargs)
 	return decorator
 
@@ -103,8 +97,6 @@ def token_required(f):
 
 file_data = "DONNEES_CLIENT.json"
 # fonction de lecture
-
-
 def get_data(filename=file_data):
 	with open(os.path.join("data", filename), "r", encoding="utf8") as data_file:
 		data = json.load(data_file)
@@ -116,16 +108,36 @@ def save_data(data, filename=file_data):
 		data_file.write(json.dumps(data, indent=4))
 
 
+#=========================================================================
+
+# class Login(Resource):
+# 	"""Login"""
+# 	def get(self):
+# 		render_login = render_template("index.html")
+# 		resp = Response(render_login, status=200, content_type="text/html")
+# 		return resp
+
+# 	def post(self):
+# 		info = request.form
+# 		user = verify_password(info["username"],info["password"])
+# 		if user:
+# 			token = make_token(user)
+# 			#print(token)
+# 			return {'Token': token.decode('UTF-8')}
+# 			#return redirect("/data", code=302)
+# 		else:
+# 			return {"ERREUR":"Username ou mot de passe incorrect!"}, 400
+
+
 class Login(Resource):
-	"""retourne le contenu du fichier json"""
-	def get(self):
-		render_login = render_template("index.html")
-		resp = Response(render_login, status=200, content_type="text/html")
-		return resp
+	"""Login"""
+	# def get(self):
+	# 	render_login = render_template("index.html")
+	# 	resp = Response(render_login, status=200, content_type="text/html")
+	# 	return resp
 
 	def post(self):
-		info = request.form
-		username = info["username"]
+		info = request.json
 		user = verify_password(info["username"],info["password"])
 		if user:
 			token = make_token(user)
@@ -134,13 +146,12 @@ class Login(Resource):
 			#return redirect("/data", code=302)
 		else:
 			return {"ERREUR":"Username ou mot de passe incorrect!"}, 400
-	
 
 
 class Data(Resource):
-	
-	"""retourne le contenu du fichier json"""
-	def get(self, contrib_name=None, public_id=None):
+	"""Retourne le contenu du fichier json"""
+	@token_required
+	def get(self, current_user, contrib_name=None, public_id=None):
 		data = get_data()
 		result = []
 		if contrib_name == None and public_id == None:
@@ -186,7 +197,8 @@ class Data(Resource):
 			res = {"OK": "Article ajouté avec succès"}, 200
 			return res
 
-	def post(self):
+	@token_required
+	def post(self, current_user):
 		data = get_data()
 		data_edit = request.json
 		article_id = request.args.get('article_id')
@@ -202,7 +214,8 @@ class Data(Resource):
 				res = {"ERROR": "Article non trouvé"}, 404
 		return res
 
-	def delete(self):
+	@token_required
+	def delete(self, current_user):
 		data = get_data()
 		article_id = request.args.get('article_id')
 		for n, d in enumerate(data["contributions"]["data"]):
@@ -215,9 +228,8 @@ class Data(Resource):
 			res = {"ERROR": "Article non trouvé"}, 404
 			return res
 
-api.add_resource(Login, "/", "/authentification")
-api.add_resource(Data, "/data", "/data/<string:contrib_name>",
-						"/data/<string:contrib_name>/<string:public_id>")
+api.add_resource(Login, "/", "/login")
+api.add_resource(Data, "/data","/data/<string:contrib_name>", "/data/<string:contrib_name>/<string:public_id>")
 
 
 if __name__ == '__main__':

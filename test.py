@@ -1,0 +1,55 @@
+import requests
+
+url = 'http://www.ceptyconsultant.localhost/'
+
+# accéder aux données sans login
+r = requests.get(url + '/data/a')
+assert r.json() == {'message': 'token manquant'}
+
+
+# login et obtenir le token
+r = requests.post(url + '/login', json={"username":"Thomas", "password":"Mikolov"})
+assert r.status_code == 200
+token = r.json()["Token"]
+print(token)
+
+
+
+# GET
+# accéder aux données avec son token
+headers = { 'x-access-tokens' : token }
+r = requests.get(url + '/data/a', headers=headers)
+assert 'data' in r.json()
+
+
+
+# DELETE
+# supprimer des données avec son token
+params = {'article_id': '93ecdcd3-c570-4891-94ac-e4c7d449a7bc'}
+headers = { 'x-access-tokens' : token }
+r = requests.delete(url + '/data', headers=headers, params=params)
+#print(r.json())
+assert r.json() == {'OK': 'Article supprimé avec succés'}
+
+
+# PUT
+contrib = {
+    "article_id": "93ecdcd3-c570-4891-94ac-e4c7d449a7bc",
+    "contrib_data": "mlem-_sound_2-2019-09-03T193015.084Z-.wav",
+    "contrib_name": "m\u025b\u0301le\u0304m",
+    "contrib_path": "https://ntealan.net/soundcontrib/",
+    "contrib_type": "sound",
+    "dico_id": "yb_fr_3031",
+    "last_update": "2019-09-03 19:32:51.447000",
+    "ntealan": True,
+    "public_id": "5e328321-e943-4ab5-b892-3d45ed4f94dd",
+    "user_id": "b42e96a8-7b0b-8b45-ae69-7c2efd472e1d",
+    "user_name": "Bergier",
+    "validate": True
+}
+
+
+headers = { 'x-access-tokens' : token }
+r = requests.put(url + '/data', headers=headers, json=contrib )
+#print(r.json())
+assert r.json() == {'OK': 'Article ajouté avec succès'}

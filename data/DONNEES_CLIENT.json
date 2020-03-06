@@ -2,34 +2,6 @@
     "contributions": {
         "data": [
             {
-                "article_id": "0facf001-cb58-42c5-82b8-cd2dd2099967",
-                "contrib_data": "a-_sound_1-2019-08-26T111407.675Z-.wav",
-                "contrib_name": "a",
-                "contrib_path": "https://ntealan.net/soundcontrib/",
-                "contrib_type": "sound",
-                "dico_id": "yb_fr_3031",
-                "last_update": "2019-08-26 11:15:38.811000",
-                "ntealan": true,
-                "public_id": "94ec363b-0537-4929-820e-b0559c57ab4d",
-                "user_id": "5184066e-8d5d-4809-1faa-60e384473935",
-                "user_name": "Bergier",
-                "validate": false
-            },
-            {
-                "article_id": "93ecdcd3-c570-4891-94ac-e4c7d449a7bc",
-                "contrib_data": "mlem-_sound_2-2019-09-03T193015.084Z-.wav",
-                "contrib_name": "m\u025b\u0301le\u0304m",
-                "contrib_path": "https://ntealan.net/soundcontrib/",
-                "contrib_type": "sound",
-                "dico_id": "yb_fr_3031",
-                "last_update": "2019-09-03 19:32:51.447000",
-                "ntealan": true,
-                "public_id": "5e328321-e943-4ab5-b892-3d45ed4f94dd",
-                "user_id": "b42e96a8-7b0b-8b45-ae69-7c2efd472e1d",
-                "user_name": "Bergier",
-                "validate": true
-            },
-            {
                 "article_id": "d865db16-93fc-4025-936c-ef4f7a01e454",
                 "contrib_data": "mba-d865db16-93fc-4025-936c-ef4f7a01e454_1-2019-09-05T075035.034Z-.wav",
                 "contrib_name": "mba\u2019",
@@ -277,20 +249,6 @@
                 "last_update": "2019-12-26 16:18:27.391000",
                 "ntealan": true,
                 "public_id": "bb5d77e4-4de0-44f0-ae78-40d82fe1fabc",
-                "user_id": "b42e96a8-7b0b-8b45-ae69-7c2efd472e1d",
-                "user_name": "Taken",
-                "validate": true
-            },
-            {
-                "article_id": "0facf001-cb58-42c5-82b8-cd2dd2099967",
-                "contrib_data": "a-_sound_1-2019-09-23T110315.676Z-.wav",
-                "contrib_name": "a",
-                "contrib_path": "https://ntealan.net/soundcontrib/",
-                "contrib_type": "sound",
-                "dico_id": "yb_fr_3031",
-                "last_update": "2019-12-26 16:20:02.311000",
-                "ntealan": true,
-                "public_id": "73008c54-43c8-4007-9957-56d406952481",
                 "user_id": "b42e96a8-7b0b-8b45-ae69-7c2efd472e1d",
                 "user_name": "Taken",
                 "validate": true
@@ -1036,6 +994,20 @@
                 "user_id": "ZZZZZZZZZZZZZZZ",
                 "user_name": "Bergier",
                 "validate": false
+            },
+            {
+                "article_id": "93ecdcd3-c570-4891-94ac-e4c7d449a7bc",
+                "contrib_data": "mlem-_sound_2-2019-09-03T193015.084Z-.wav",
+                "contrib_name": "m\u025b\u0301le\u0304m",
+                "contrib_path": "https://ntealan.net/soundcontrib/",
+                "contrib_type": "sound",
+                "dico_id": "yb_fr_3031",
+                "last_update": "2020-03-06 15:38:06.379131",
+                "ntealan": true,
+                "public_id": "5e328321-e943-4ab5-b892-3d45ed4f94dd",
+                "user_id": "b42e96a8-7b0b-8b45-ae69-7c2efd472e1d",
+                "user_name": "Bergier",
+                "validate": true
             }
         ],
         "id_dico": "yb_fr_3031"
