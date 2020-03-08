@@ -7,7 +7,7 @@ import requests
 app = Flask(__name__)
 api = Api(app)
 
-api_backend = "http://api.ceptyconsultant.localhost"
+api_backend = "https://api.ceptyconsultant.localhost"
 
 class Login(Resource):
 	"""Login"""
