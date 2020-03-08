@@ -17,11 +17,18 @@ api = Api(app)
 #======================================================================
 # Gestion des identifiants des utilisateurs
 class User:
-	"Une utilisateur avec son id, son nom d'utilisateur, et son mot de passe"
+	"Un utilisateur avec son id, son nom d'utilisateur, et son mot de passe"
 	def __init__(self, cepty_id:str, username:str, password):
 		self.id = cepty_id
 		self.username = username
 		self.password = password
+
+	def to_json(self):
+		return {
+			"cepty_id":self.id,
+			"username":self.username,
+			"password":self.password
+			}
 
 
 def get_users(filename="LISTE_COLLABORATEURS.json"):
@@ -30,7 +37,7 @@ def get_users(filename="LISTE_COLLABORATEURS.json"):
 		data = json.load(data_file)
 	users = []
 	for user in data.values():
-		user = User(user["id"], user["prenom"], generate_password_hash(user["nom"]))
+		user = User(user["id"], user["nom"], generate_password_hash(user["prenom"]))
 		users.append(user)
 	return users
 	# [User("cepty_001", "Bernard", "*******"), etc.]
@@ -138,7 +145,7 @@ class Login(Resource):
 		if user:
 			token = make_token(user)
 			#print(token)
-			return {'Token': token.decode('UTF-8')}
+			return {'User':user.to_json(), 'Token': token.decode('UTF-8')}
 			#return redirect("/data", code=302)
 		else:
 			return {"ERREUR":"Username ou mot de passe incorrect!"}, 400
@@ -150,28 +157,37 @@ class Data(Resource):
 	def get(self, current_user, contrib_name=None, public_id=None):
 		data = get_data()
 		result = []
-		if contrib_name == None and public_id == None:
-			res = {"WARNING":"Accès refusé pour le moment"}, 200
-			return res
 
-		elif public_id == None:
+		# user_search = request.args.get('user_search')
+		# if user_search:
+		# 	for d in data["contributions"]["data"]:
+		# 		if d["user_name"] == user_search: 
+		# 			result.append(d)
+		# 	res = {"data":result}, 200
 
+
+
+		if public_id==None and contrib_name==None:
+			result = data["contributions"]["data"]
+			res = {"data":result}, 200
+		
+		if public_id==None and contrib_name!=None:
 			for d in data["contributions"]["data"]:
 				if d["contrib_name"] == contrib_name: 
 					result.append(d)
 			if len(result) == 0:
 				res = {"ERROR":"contrib_name introuvable"}, 404
 			else : res = {"data":result}, 200
-			return res
 
-		else :
+		if public_id!=None and contrib_name!=None:
 			for d in data["contributions"]["data"]:
 				if d["contrib_name"] == contrib_name and d["public_id"] == public_id: 
 					result.append(d)
 			if len(result) == 0:
 				res = {"ERROR":"contrib_name ou public_id introuvable"}, 404
 			else : res = {"data":result}, 200
-			return res
+		
+		return res
 
 
 	@token_required
