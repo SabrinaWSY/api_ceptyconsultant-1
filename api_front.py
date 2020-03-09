@@ -26,6 +26,7 @@ class Login(Resource):
 
 		info = request.form
 		user_id = {"username":info["username"], "password":info["password"]}
+		
 		r = requests.post(api_backend + '/login', json=user_id, verify=False)
 		
 		token = r.json()["Token"]
@@ -43,17 +44,20 @@ class Data(Resource):
 			abort(403)
 
 		headers = { 'x-access-tokens' : auth }
-
 		# if "username" in current_user:
 		# 	param = "?user_search=" + current_user["username"]
-
 		if public_id==None and contrib_name==None:
 			r = requests.get(api_backend + "/data", headers=headers, verify=False)
 		if public_id==None and contrib_name!=None:
 			r = requests.get(api_backend + "/data/" + contrib_name, headers=headers, verify=False)
 		if public_id!=None and contrib_name!=None:
 			r = requests.get(api_backend + "/data/" + contrib_name + "/" + public_id, headers=headers, verify=False)
-		return r.json()
+		
+		render_data = render_template("data.html")
+		resp = Response(render_data, status=200, content_type="text/html")
+
+		# resp = r.json()
+		return resp
 		
 
 
