@@ -29,36 +29,15 @@
                     <a class="nav-link" href="#" style="color:blue;">Données</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Mentions légales</a>
+                    <a class="nav-link" href="{{ url_for('licence') }}">Mentions légales</a>
                 </li>
             </ul>
 
-            <p class="ml-auto small">Connecté en tant que {{ username }}</p>
-            <a class="ml-auto navbar-text" href="#">Déconnexion</a>
+            <p class="ml-auto small">Connecté en tant que {{ current_user }}</p>
+            <a href="{{ url_for('login') }}" class="ml-auto navbar-text" href="#">Déconnexion</a>
         </div>
     </nav>
     <!-- fin nav -->
-
-    <!-- modalDelete -->
-    <div id="modalDelete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="myModalLabel">Avertissement</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <p>Êtes-vous certain de vouloir supprimer cet élément ?</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Annuler</button>
-                    <button class="btn btn-danger">Supprimer</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- fin modalDelete -->
 
     <!-- Search data hidden popup-->
     <div class="modal fade" id="searchDataForm" tabindex="-2" role="dialog" aria-labelledby="searchDataForm"
@@ -97,7 +76,7 @@
 
     <div class="modal fade" id="addDataForm" tabindex="-1" role="dialog" aria-labelledby="addDataForm"
         aria-hidden="true">
-        <form method="POST">
+        <form action="{{ url_for('data') }}" method=POST>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header text-center">
@@ -118,7 +97,7 @@
                         <input type="text" name="contrib_name" id="contrib_name" class="form-control validate">
 
                         <label data-error="wrong" data-success="right" for="">contrib_path</label>
-                        <input type="text" name="contrib_path" id="contrib_path" class="form-control validate">
+                        <input type="url" name="contrib_path" id="contrib_path" class="form-control validate">
 
                         <label data-error="wrong" data-success="right" for="">contrib_type</label>
                         <input type="text" name="contrib_type" id="contrib_type" class="form-control validate">
@@ -143,6 +122,9 @@
 
                         <label data-error="wrong" data-success="right" for="">validate</label>
                         <input type="text" name="validate" id="validate" class="form-control validate">
+                    
+                        <input type="hidden" name="action" id="action" class="form-control validate" value="add">
+
                     </div>
                 </div>
 
@@ -168,8 +150,6 @@
 
             <div class="container">
 
-                
-                    
                 <div class="align-items-left justify-content-left table-responsive col-12">
                     <table class="table table-bordered table-striped my-3">
                         <thead>
@@ -194,19 +174,18 @@
 
                 <div class="align-items-right justify-content-right small my-3 mx-3 float-right">
                     <div class="float-right">
-                        <a href="#modalEdit" role="button" class="btn btn-primary" data-toggle="modal">Modifier</a>
-                        <a href="#modalDelete" role="button" class="btn btn-danger" data-toggle="modal">Supprimer</a>
+                        <a href="#modalEdit_{{d.article_id}}" role="button" class="btn btn-primary" data-toggle="modal">Modifier</a>
+                        <a href="#modalDelete_{{d.article_id}}" role="button" class="btn btn-danger" data-toggle="modal">Supprimer</a>
                     </div>
                 </div>
 
             </div>
 
-        </section>
-
-        {% endfor %}
-
-        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+       
+        <!-- ModalEditData -->
+        <div class="modal fade" id="modalEdit_{{d.article_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
             aria-hidden="true">
+            <form method=POST>
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header text-center">
@@ -217,50 +196,82 @@
                     </div>
                     <div class="modal-body mx-3">
                         <div class="md-form mb-5">
-                            <label data-error="wrong" data-success="right" for="">article_id</label>
-                            <input type="text" id="" class="form-control validate"
-                                value="d865db16-93fc-4025-936c-ef4f7a01e454">
+                        <label data-error="wrong" data-success="right" for="">article_id</label>
+                        <input type="text" name="article_id" id="article_id" class="form-control validate" value="{{d.article_id}}" readonly>
 
-                            <label data-error="wrong" data-success="right" for="">contrib_data</label>
-                            <input type="text" id="" class="form-control validate"
-                                value="mba-d865db16-93fc-4025-936c-ef4f7a01e454_1-2019-09-05T075035.034Z-.wav">
+                        <label data-error="wrong" data-success="right" for="">contrib_data</label>
+                        <input type="text" name="contrib_data" id="contrib_data" class="form-control validate" value="{{d.contrib_data}}">
 
-                            <label data-error="wrong" data-success="right" for="">contrib_name</label>
-                            <input type="text" id="" class="form-control validate"
-                                value="https://ntealan.net/soundcontrib/">
+                        <label data-error="wrong" data-success="right" for="">contrib_name</label>
+                        <input type="text" name="contrib_name" id="contrib_name" class="form-control validate" value="{{d.contrib_name}}">
 
-                            <label data-error="wrong" data-success="right" for="">contrib_path</label>
-                            <input type="text" id="" class="form-control validate" value="yb_fr_3031">
+                        <label data-error="wrong" data-success="right" for="">contrib_path</label>
+                        <input type="text" name="contrib_path" id="contrib_path" class="form-control validate" value="{{d.contrib_path}}">
 
-                            <label data-error="wrong" data-success="right" for="">last_update</label>
-                            <input type="text" id="" class="form-control validate" value="yb_fr_3031">
+                        <label data-error="wrong" data-success="right" for="">contrib_type</label>
+                        <input type="text" name="contrib_type" id="contrib_type" class="form-control validate" value="{{d.contrib_type}}">
 
-                            <label data-error="wrong" data-success="right" for="">ntealan</label>
-                            <input type="text" id="" class="form-control validate" value="true">
+                        <label data-error="wrong" data-success="right" for="">dico_id</label>
+                        <input type="text" name="dico_id" id="dico_id" class="form-control validate" value="{{d.dico_id}}">
 
-                            <label data-error="wrong" data-success="right" for="">article_id</label>
-                            <input type="text" id="" class="form-control validate"
-                                value="d865db16-93fc-4025-936c-ef4f7a01e454">
+                        <input type="hidden" name="last_update" id="last_update" class="form-control validate">
 
-                            <label data-error="wrong" data-success="right" for="">public_id</label>
-                            <input type="text" id="" class="form-control validate"
-                                value="8ad93a62-9437-416f-93c6-948a2c15b45b">
+                        <label data-error="wrong" data-success="right" for="">ntealan</label>
+                        <input type="text" name="ntealan" id="ntealan" class="form-control validate" value="{{d.ntealan}}">
 
-                            <label data-error="wrong" data-success="right" for="">user_name</label>
-                            <input type="text" id="" class="form-control validate" value="Bergier">
+                        <label data-error="wrong" data-success="right" for="">public_id</label>
+                        <input type="text" name="public_id" id="public_id" class="form-control validate" value="{{d.public_id}}">
 
-                            <label data-error="wrong" data-success="right" for="">validate</label>
-                            <input type="text" id="" class="form-control validate" value="false">
+                        <label data-error="wrong" data-success="right" for="">user_id</label>
+                        <input type="text" name="user_id" id="user_id" class="form-control validate" value="{{d.user_id}}">
+
+                        <label data-error="wrong" data-success="right" for="">user_name</label>
+                        <input type="text" name="user_name" id="user_name" class="form-control validate" value="{{current_user}}" readonly>
+
+                        <label data-error="wrong" data-success="right" for="">validate</label>
+                        <input type="text" name="validate" id="validate" class="form-control validate" value="{{d.validate}}">
+                        
+                        <input type="hidden" name="action" id="action" class="form-control validate" value="edit">
+
                         </div>
                     </div>
 
                     <div class="modal-footer d-flex justify-content-center">
-                        <button class="btn btn-primary">Valider</button>
+                        <button type="submit" class="btn btn-primary">Valider</button>
                     </div>
                 </div>
             </div>
+            </form>
         </div>
 
+
+        <!-- ModalDeleteData -->
+        <div id="modalDelete_{{d.article_id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <form method=POST>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="myModalLabel">Avertissement</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Êtes-vous certain de vouloir supprimer cet élément ?</p>
+                        <input type="hidden" name="article_id" id="article_id" class="form-control validate" value="{{d.article_id}}">
+                        <input type="hidden" name="action" id="delete" class="form-control validate" value="delete">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Annuler</button>
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+
+    </section>
+
+    {% endfor %}
         
 
     </div>

@@ -211,8 +211,11 @@ class Data(Resource):
 
 	@token_required
 	def post(self, current_user):
+		print("TTTTTTTTTTTTTTTTESSSSSSSSSST")
 		data = get_data()
+		print("TTTTTTTTTTTTTTTTESSSSSSSSSST")
 		data_edit = request.json
+		print(data_edit)
 		article_id = request.args.get('article_id')
 		for n, d in enumerate(data["contributions"]["data"]):
 			if d["article_id"] == article_id:
@@ -222,9 +225,9 @@ class Data(Resource):
 				d["last_update"] = str(time)
 				save_data(data)
 				res = {"OK": "Données modifées avec succès"}, 200
-			else : 
-				res = {"ERROR": "Article non trouvé"}, 404
-		return res
+				return res
+		else : 
+			res = {"ERROR": "Article non trouvé"}, 404
 
 	@token_required
 	def delete(self, current_user):
