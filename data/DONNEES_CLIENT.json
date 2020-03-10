@@ -1008,6 +1008,34 @@
                 "user_id": "b42e96a8-7b0b-8b45-ae69-7c2efd472e1d",
                 "user_name": "Bergier",
                 "validate": true
+            },
+            {
+                "article_id": "AAAA",
+                "contrib_data": "AAA",
+                "contrib_name": "AAa",
+                "contrib_path": "AAA",
+                "contrib_type": "AAA",
+                "dico_id": "AAAA",
+                "last_update": "2020-03-09 20:39:34.605763",
+                "ntealan": "",
+                "public_id": "",
+                "user_id": "",
+                "user_name": "",
+                "validate": ""
+            },
+            {
+                "article_id": "",
+                "contrib_data": "",
+                "contrib_name": "",
+                "contrib_path": "",
+                "contrib_type": "",
+                "dico_id": "",
+                "last_update": "2020-03-09 20:40:27.464648",
+                "ntealan": "",
+                "public_id": "",
+                "user_id": "",
+                "user_name": "",
+                "validate": ""
             }
         ],
         "id_dico": "yb_fr_3031"
