@@ -42,6 +42,7 @@
     <!-- Search data hidden popup-->
     <div class="modal fade" id="searchDataForm" tabindex="-2" role="dialog" aria-labelledby="searchDataForm"
         aria-hidden="true">
+        <form action="{{ url_for('data') }}" method=POST>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header text-center">
@@ -54,10 +55,12 @@
                     <div class="md-form mb-5">
 
                         <label data-error="wrong" data-success="right" for="">contrib_name</label>
-                        <input type="text" id="" class="form-control validate">
+                        <input type="text" name="contrib_name" id="contrib_name" class="form-control validate" required>
 
-                        <label data-error="wrong" data-success="right" for="">article_id</label>
-                        <input type="text" id="" class="form-control validate">
+                        <label data-error="wrong" data-success="right" for="">public_id</label>
+                        <input type="text" name="public_id" id="public_id" class="form-control validate">
+
+                        <input type="hidden" name="action" id="action" class="form-control validate" value="search">
 
                         <!-- <label data-error="wrong" data-success="right" for="">user_name</label>
                         <input type="text" id="" class="form-control validate"> -->
@@ -66,10 +69,11 @@
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center">
-                    <button class="btn btn-primary">Lancer la recherche</button>
+                    <button type="submit" class="btn btn-primary">Lancer la recherche</button>
                 </div>
             </div>
         </div>
+        </form>
     </div>
 
     <!-- add data hidden popup-->
@@ -138,8 +142,8 @@
 
     <div class="container">
             <div class="text-right" style="font-size: 2rem;">
-                <a href="" data-toggle="modal" data-target="#searchDataForm"><i class="fa fa-search mx-3"></i></a>
-                <a href="" data-toggle="modal" data-target="#addDataForm"><i class="fa fa-plus lg"></i></a>
+                <a href="" data-toggle="modal" data-target="#searchDataForm"><i class="fa fa-search mx-2"></i></a>
+                <a href="" data-toggle="modal" data-target="#addDataForm"><i class="fa fa-plus mx-2"></i></a>
             </div>
 
 
