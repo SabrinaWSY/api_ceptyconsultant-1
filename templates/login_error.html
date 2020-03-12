@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Ceptyconsultant</title>
-    <meta name="description" content="page de connexion" />
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="/static/css/bootstrap.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
-</head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Ceptyconsultant</title>
+        <meta name="description" content="page de connexion"/>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
 
 <body>
-    <div class="container" left-right>   
-        <h2 style="text-align: center"> Vous n'êtes pas connecté</h2>
+    <div id="login">
+        <div class="alert alert-danger" role="alert" style="text-align: center;">
+            Vous n'êtes pas connecté(e)!
+        </div>
         <a href="{{ url_for('login') }}" style="margin: 0 auto; display:block; text-align: center" ><< Connection</a>
     </div>
 </body>
