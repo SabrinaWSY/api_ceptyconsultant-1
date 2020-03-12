@@ -149,7 +149,7 @@ class Data(Resource):
 				if d["contrib_name"] == contrib_name: 
 					result.append(d)
 			if len(result) == 0:
-				res = {"ERROR":"contrib_name introuvable"}, 404
+				res = {"ERROR":"aucune  données n'a été trouvée"}, 404
 			else : res = {"data":result}, 200
 
 		if public_id!=None and contrib_name!=None:
@@ -157,7 +157,7 @@ class Data(Resource):
 				if d["contrib_name"] == contrib_name and d["public_id"] == public_id: 
 					result.append(d)
 			if len(result) == 0:
-				res = {"ERROR":"contrib_name ou public_id introuvable"}, 404
+				res = {"ERROR":"aucune  données n'a été trouvée"}, 404
 			else : res = {"data":result}, 200
 		
 		return res

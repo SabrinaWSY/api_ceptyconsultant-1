@@ -14,6 +14,8 @@ def _check_cookie_auth():
 	token = request.cookies.get('token')
 	return token
 
+
+
 class Login(Resource):
 	"""Login"""
 	def get(self):
@@ -56,26 +58,30 @@ class Data(Resource):
 
 		
 		data_get = r.json()
+		print(data_get)
 		if "data" in data_get:
 			data = data_get["data"]
 			render_data = render_template(
 				"data.html",
-				current_user=username,
 				data=data,
-				visibility={}
 			)
 			resp = Response(render_data, status=200, content_type="text/html")
 			return resp
+
+		elif data_get['ERROR'] == 'aucune  données n\'a été trouvée':
+			render_data = render_template("response.html", message="Aucune donnée n'a été trouvé!", alert="warning")
+			resp = Response(render_data, status=404, content_type="text/html")
+			return resp
 		
-		else :
-			abort(404)
+
 		
 		
 	def post(self):
-		print("post")
 		auth = _check_cookie_auth()
 		if auth == None:
-			abort(403)
+			render_response = render_template("login_error.html", message="Données supprimées avec succès!")
+			resp = Response(render_response, status=403, content_type="text/html")
+			return resp
 		
 		data_form = request.form
 
@@ -113,7 +119,6 @@ class Data(Resource):
 			return resp
 
 		elif data_form['action'] == 'add':
-			
 			data_set = {
 				"article_id":data_form["article_id"],
 				"contrib_data":data_form["contrib_data"],
