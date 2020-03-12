@@ -46,6 +46,8 @@ users = get_users()
 
 
 key = 'ceptyconsultant'
+# key = "\xd5PE\xa3t\x96D\xa2\xae\xc2\xcfIq\xe7\xefk"
+
 def make_token(user):
 		"""Génère le Auth Token """
 		encode_params = { 
@@ -59,11 +61,6 @@ def make_token(user):
 			return token
 		except jwt.ExpiredSignatureError:
 			return "token expired!"
-
-def verify_token(token):
-	"""Décode le Auth Token"""
-	decoded = jwt.decode(token, key, algorithms='HS256')
-	return decoded["username"]
 
 
 def verify_password(username:str, password:str):
@@ -113,32 +110,8 @@ def save_data(data, filename=file_data):
 
 #=========================================================================
 
-# class Login(Resource):
-# 	"""Login"""
-# 	def get(self):
-# 		render_login = render_template("index.html")
-# 		resp = Response(render_login, status=200, content_type="text/html")
-# 		return resp
-
-# 	def post(self):
-# 		info = request.form
-# 		user = verify_password(info["username"],info["password"])
-# 		if user:
-# 			token = make_token(user)
-# 			#print(token)
-# 			return {'Token': token.decode('UTF-8')}
-# 			#return redirect("/data", code=302)
-# 		else:
-# 			return {"ERREUR":"Username ou mot de passe incorrect!"}, 400
-
-
 class Login(Resource):
 	"""Login"""
-	# def get(self):
-	# 	render_login = render_template("index.html")
-	# 	resp = Response(render_login, status=200, content_type="text/html")
-	# 	return resp
-
 	def post(self):
 		info = request.json
 		user = verify_password(info["username"],info["password"])

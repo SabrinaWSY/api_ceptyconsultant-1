@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Ceptyconsultant</title>
+    <meta name="description" content="page de connexion" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+
+<body>
+    
+    <nav class="navbar navbar-inverse navbar-light navbar-expand-sm navbar-custom mb-5" style=" 
+        -webkit-box-shadow: 0px 4px 9px 1px rgba(143, 143, 143, 0.5);
+        -moz-box-shadow: 0px 4px 9px 1px rgba(143, 143, 143, 0.5);
+        box-shadow: 0px 4px 9px 1px rgba(143, 143, 143, 0.5);">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a href="{{ url_for('data') }}" class="navbar-brand">Ceptyconsultant</a>
+        <div class="navbar-collapse collapse" id="navbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('data') }}">Données</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('license') }}">Mentions légales</a>
+                </li>
+            </ul>
+
+
+            <a href="{{ url_for('login') }}" class="ml-auto navbar-text" href="#">Déconnexion</a>
+        </div>
+    </nav>
+    <!-- fin nav -->
+
+    {% block content %}
+
+    {% endblock %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- <script src="static/js/bootstrap.min.js"></script> -->
+
+    
+</body>
+
+<!-- Footer -->
+<footer class="page-footer font-small blue">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">
+        © 2020 Copyright: MIT <a href="{{ url_for('license') }}">Ceptyconsultant</a>
+    </div>
+    <!-- Copyright -->
+  
+</footer>
+<!-- Footer -->
+
+</html>
