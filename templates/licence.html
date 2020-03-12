@@ -26,12 +26,12 @@
                     <a class="nav-link" href="{{ url_for('data') }}">Données</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" style="color:blue;">Mentions légales</a>
+                    <a class="nav-link" href="{{ url_for('licence') }}" style="color:blue;">Mentions légales</a>
                 </li>
             </ul>
 
             <p class="ml-auto small">Connecté en tant que {{current_user}}</p>
-            <a class="ml-auto navbar-text" href="#">Déconnexion</a>
+            <a class="ml-auto navbar-text" href="{{ url_for('login') }}">Déconnexion</a>
         </div>
     </nav>
     <!-- fin nav -->
@@ -46,6 +46,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <th>licence</th>
+                    </tr>
+                    <tr>
+                        <th>
+                        <p>Copyright 2020 Ceptyconsultant Inalco </p>
+                        </th>
+                    </tr>
                     <tr>
                         <th>Informations éditoriales</th>
                     </tr>
