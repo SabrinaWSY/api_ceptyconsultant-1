@@ -73,7 +73,8 @@ class Data(Resource):
 			render_data = render_template(
 				"data.html",
 				current_user=username,
-				data=data
+				data=data,
+				visibility={}
 			)
 			resp = Response(render_data, status=200, content_type="text/html")
 			return resp
@@ -94,7 +95,10 @@ class Data(Resource):
 			article_id = data_form["article_id"]
 			headers = { 'x-access-tokens' : auth }
 			r = requests.delete(api_backend + '/data?article_id=' + article_id, headers=headers, verify=False)
-			resp = redirect('/data')
+			# resp = redirect('/data')
+			# return resp
+			render_response = render_template("response.html", message="Données supprimées avec succès!", alert="success")
+			resp = Response(render_response, status=200, content_type="text/html")
 			return resp
 		
 		elif data_form['action'] == 'edit':
@@ -116,9 +120,8 @@ class Data(Resource):
 			headers = { 'x-access-tokens' : auth }
 			r = requests.post(api_backend + '/data?article_id=' + article_id, json=data_set_1, headers=headers, verify=False)
 			
-			
-			print("TESTTTTTTTT", r.json())
-			resp = redirect('/data')
+			render_response = render_template("response.html", message="Données modifiées avec succès!", alert="success")
+			resp = Response(render_response, status=200, content_type="text/html")
 			return resp
 
 		elif data_form['action'] == 'add':
@@ -139,7 +142,8 @@ class Data(Resource):
 			}
 			headers = { 'x-access-tokens' : auth }
 			r = requests.put(api_backend + '/data', json=data_set, headers=headers, verify=False)
-			resp = redirect('/data')
+			render_response = render_template("response.html", message="Données ajoutées avec succès!", alert="success")
+			resp = Response(render_response, status=200, content_type="text/html")
 			return resp
 		
 		elif data_form['action'] == 'search':
