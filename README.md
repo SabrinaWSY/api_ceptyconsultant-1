@@ -35,15 +35,15 @@ sudo sh launcher.sh
 
 ### Ce que fait l'installeur :
 
-2. **Installe les dépendances Python**
-3. **Configure Nginx** grâce au fichier *ceptyconsultant.conf*. Veuillez à installer Nginx avant l'installation  de l'application
+1. **Installe les dépendances Python**
+2. **Configure Nginx** grâce au fichier *ceptyconsultant.conf*. Veuillez à installer Nginx avant l'installation  de l'application
 
 
 ## Auteurs
 
 Nom | Contribution
 -|-
-Pierre ROCHET | back-end, front-end
+Pierre ROCHET | back-end, front-end, 
 Siyu WANG | config nginx, front-end, doc client
 Chen SUN | doc technique
 Alexender IVANOV | doc technique
