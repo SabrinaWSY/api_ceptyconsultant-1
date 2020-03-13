@@ -163,7 +163,7 @@ class Data(Resource):
 				if d["contrib_name"] == contrib_name and d["public_id"] == public_id: 
 					result.append(d)
 			if len(result) == 0:
-				res = {"ERROR":"Aucune  donnée n'a été trouvée"}, 404
+				res = {"ERROR":"Aucune donnée n'a été trouvée"}, 404
 			else : res = {"data":result}, 200
 		
 		return res
