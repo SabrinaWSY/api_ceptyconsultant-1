@@ -13,7 +13,7 @@ Créez l'environnement virtuel et activez-le (vivement recommandé)
 
 ```Console
 sudo virtualenv --python=python3 venv-ceptyconsultant
-sudo source venv-ceptyconsultant/bin/activate
+source venv-ceptyconsultant/bin/activate
 ```
 
 ```Console
