@@ -48,6 +48,7 @@ users = get_users()
 key = "\xd5PE\xa3t\x96D\xa2\xae\xc2\xcfIq\xe7\xefk"
 
 
+
 def make_token(user):
 		"""Génère le auth token"""
 		encode_params = { 
@@ -127,7 +128,7 @@ class Login(Resource):
 			token = make_token(user)
 			return {'User':user.to_json(), 'Token': token.decode('UTF-8')}
 		else:
-			return {"ERROR":"Username ou mot de passe incorrect!"}, 400
+			return {"ERROR":"Username ou mot de passe incorrect"}, 400
 
 
 class Data(Resource):
@@ -152,7 +153,7 @@ class Data(Resource):
 				if d["contrib_name"] == contrib_name: 
 					result.append(d)
 			if len(result) == 0:
-				res = {"ERROR":"aucune données n'a été trouvée"}, 404
+				res = {"ERROR":"Aucune donnée n'a été trouvée"}, 404
 			else : res = {"data":result}, 200
 
 		# Renvoie les données filtrées sur un contrib_name + public_id
@@ -162,7 +163,7 @@ class Data(Resource):
 				if d["contrib_name"] == contrib_name and d["public_id"] == public_id: 
 					result.append(d)
 			if len(result) == 0:
-				res = {"ERROR":"aucune  données n'a été trouvée"}, 404
+				res = {"ERROR":"Aucune  donnée n'a été trouvée"}, 404
 			else : res = {"data":result}, 200
 		
 		return res
@@ -186,7 +187,7 @@ class Data(Resource):
 		# sinon on peut ajouter les nouvelles données
 		list_id = [d["article_id"] for d in data["contributions"]["data"]]
 		if data_add["article_id"] in list_id:
-			res = {"ERROR": "article_id existe déjà"}, 400
+			res = {"ERROR": "Article_id existe déjà"}, 400
 			return res
 		else:
 			time = datetime.datetime.utcnow()
