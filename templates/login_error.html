@@ -16,7 +16,7 @@
 <body>
     <div id="login">
         <div class="alert alert-danger" role="alert" style="text-align: center;">
-            Vous n'êtes pas connecté(e)!
+            {{ message }}
         </div>
         <a href="{{ url_for('login') }}" style="margin: 0 auto; display:block; text-align: center" ><< Connection</a>
     </div>

@@ -45,8 +45,8 @@ def get_users(filename="LISTE_COLLABORATEURS.json"):
 users = get_users()
 
 
-key = 'ceptyconsultant'
-# key = "\xd5PE\xa3t\x96D\xa2\xae\xc2\xcfIq\xe7\xefk"
+#key = 'ceptyconsultant'
+key = "\xd5PE\xa3t\x96D\xa2\xae\xc2\xcfIq\xe7\xefk"
 
 def make_token(user):
 		"""Génère le Auth Token """
@@ -121,7 +121,7 @@ class Login(Resource):
 			return {'User':user.to_json(), 'Token': token.decode('UTF-8')}
 			#return redirect("/data", code=302)
 		else:
-			return {"ERREUR":"Username ou mot de passe incorrect!"}, 400
+			return {"ERROR":"Username ou mot de passe incorrect!"}, 400
 
 
 class Data(Resource):
