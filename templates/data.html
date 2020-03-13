@@ -60,37 +60,56 @@ aria-hidden="true">
                 <input type="text" name="article_id" id="article_id" class="form-control validate" required pattern="[0-9a-zA-Z-]+">
 
                 <label data-error="wrong" data-success="right" for="">contrib_data</label>
-                <input type="text" name="contrib_data" id="contrib_data" class="form-control validate">
+                <input type="text" name="contrib_data" id="contrib_data" class="form-control validate " required pattern="[0-9a-zA-Z-]+.wav">
 
                 <label data-error="wrong" data-success="right" for="">contrib_name</label>
-                <input type="text" name="contrib_name" id="contrib_name" class="form-control validate">
+                <input type="text" name="contrib_name" id="contrib_name" class="form-control validate" required>
 
                 <label data-error="wrong" data-success="right" for="">contrib_path</label>
-                <input type="url" name="contrib_path" id="contrib_path" class="form-control validate">
+                <input type="url" name="contrib_path" id="contrib_path" class="form-control validate" pattern="https://ntealan.net/soundcontrib/.*"
+                value="https://ntealan.net/soundcontrib/" >
 
                 <label data-error="wrong" data-success="right" for="">contrib_type</label>
-                <input type="text" name="contrib_type" id="contrib_type" class="form-control validate">
+                <!-- <input type="text" name="contrib_type" id="contrib_type" class="form-control validate"> -->
+                <select class="custom-select custom-select-sm" name="contrib_type" id="contrib_type">
+                    <option value="Sound">Sound</option>
+                    <option value="False" selected>False</option>
+                </select>
 
-                <label data-error="wrong" data-success="right" for="">dico_id</label>
-                <input type="text" name="dico_id" id="dico_id" class="form-control validate">
+                <label data-error="wrong" data-success="right" for="" >dico_id</label>
+                <input type="text" name="dico_id" id="dico_id" class="form-control validate" required pattern="[0-9a-zA-Z-]+">
 
-                <label data-error="wrong" data-success="right" for="">last_update</label>
-                <input type="text" name="last_update" id="last_update" class="form-control validate">
+                <!-- <label data-error="wrong" data-success="right" for="">last_update</label>
+                <input type="text" name="last_update" id="last_update" class="form-control validate"> -->
 
                 <label data-error="wrong" data-success="right" for="">ntealan</label>
-                <input type="text" name="ntealan" id="ntealan" class="form-control validate">
+                <!-- <input type="text" name="ntealan" id="ntealan" class="form-control validate"> -->
+                <select class="custom-select custom-select-sm" name="ntealan" id="ntealan">
+                    <option value="True">True</option>
+                    <option value="False" selected>False</option>
+                </select>
 
                 <label data-error="wrong" data-success="right" for="">public_id</label>
-                <input type="text" name="public_id" id="public_id" class="form-control validate">
+                <input type="text" name="public_id" id="public_id" class="form-control validate" required pattern="[0-9a-zA-Z-]+"">
 
                 <label data-error="wrong" data-success="right" for="">user_id</label>
-                <input type="text" name="user_id" id="user_id" class="form-control validate">
+                <input type="text" name="user_id" id="user_id" class="form-control validate" required pattern="[0-9a-zA-Z-]+">
 
                 <label data-error="wrong" data-success="right" for="">user_name</label>
-                <input type="text" name="user_name" id="user_name" class="form-control validate">
+                <!-- <input type="text" name="user_name" id="user_name" class="form-control validate"> -->
+                <select class="custom-select custom-select-sm" name="user_name" id="user_name">
+                    <option value="Anonymous" selected>Anonymous</option>
+                    <option value="Mikolov">Mikolov</option>
+                    <option value="Siyu">Siyu</option>
+                    <option value="Pierre">Pierre</option>
+                </select>
 
                 <label data-error="wrong" data-success="right" for="">validate</label>
-                <input type="text" name="validate" id="validate" class="form-control validate">
+                <!-- <input type="text" name="validate" id="validate" class="form-control validate"> -->
+                <select class="custom-select custom-select-sm" name="validate" id="validate">
+                    <option value="True">True</option>
+                    <option value="False" selected>False</option>
+                </select>
             
                 <input type="hidden" name="action" id="action" class="form-control validate" value="add">
 
@@ -170,37 +189,48 @@ aria-hidden="true">
                 <input type="text" name="article_id" id="article_id" class="form-control validate" value="{{d.article_id}}" readonly>
 
                 <label data-error="wrong" data-success="right" for="">contrib_data</label>
-                <input type="text" name="contrib_data" id="contrib_data" class="form-control validate" value="{{d.contrib_data}}">
+                <input type="text" name="contrib_data" id="contrib_data" class="form-control validate " required pattern="[0-9a-zA-Z-_.]+.wav" value="{{d.contrib_data}}">
 
                 <label data-error="wrong" data-success="right" for="">contrib_name</label>
-                <input type="text" name="contrib_name" id="contrib_name" class="form-control validate" value="{{d.contrib_name}}">
+                <input type="text" name="contrib_name" id="contrib_name" class="form-control validate" value="{{d.contrib_name}}" required>
 
                 <label data-error="wrong" data-success="right" for="">contrib_path</label>
-                <input type="text" name="contrib_path" id="contrib_path" class="form-control validate" value="{{d.contrib_path}}">
+                <input type="url" name="contrib_path" id="contrib_path" class="form-control validate" pattern="https://ntealan.net/soundcontrib/.*"
+                value="{{d.contrib_path}}">
 
                 <label data-error="wrong" data-success="right" for="">contrib_type</label>
-                <input type="text" name="contrib_type" id="contrib_type" class="form-control validate" value="{{d.contrib_type}}">
+                <select class="custom-select custom-select-sm" name="contrib_type" id="contrib_type">
+                    <option value="{{d.contrib_type}}" selected>{{d.contrib_type}}</option>
+                </select>
 
                 <label data-error="wrong" data-success="right" for="">dico_id</label>
-                <input type="text" name="dico_id" id="dico_id" class="form-control validate" value="{{d.dico_id}}">
+                <input type="text" name="dico_id" id="dico_id" class="form-control validate" value="{{d.dico_id}}" readonly>
 
                 <input type="hidden" name="last_update" id="last_update" class="form-control validate">
 
                 <label data-error="wrong" data-success="right" for="">ntealan</label>
-                <input type="text" name="ntealan" id="ntealan" class="form-control validate" value="{{d.ntealan}}">
+                <select class="custom-select custom-select-sm" name="ntealan" id="ntealan">
+                    <option value="{{d.ntealan}}" selected>{{d.ntealan}}</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
 
                 <label data-error="wrong" data-success="right" for="">public_id</label>
-                <input type="text" name="public_id" id="public_id" class="form-control validate" value="{{d.public_id}}">
+                <input type="text" name="public_id" id="public_id" class="form-control validate" value="{{d.public_id}}" readonly>
 
                 <label data-error="wrong" data-success="right" for="">user_id</label>
-                <input type="text" name="user_id" id="user_id" class="form-control validate" value="{{d.user_id}}">
+                <input type="text" name="user_id" id="user_id" class="form-control validate" value="{{d.user_id}}" readonly>
 
                 <label data-error="wrong" data-success="right" for="">user_name</label>
-                <input type="text" name="user_name" id="user_name" class="form-control validate" value="{{d.user_name}}">
+                <input type="text" name="user_name" id="user_name" class="form-control validate" value="{{d.user_name}}" readonly>
 
                 <label data-error="wrong" data-success="right" for="">validate</label>
-                <input type="text" name="validate" id="validate" class="form-control validate" value="{{d.validate}}">
-                
+                <select class="custom-select custom-select-sm" name="validate" id="validate">
+                    <option value="{{d.validate}}" selected>{{d.validate}}</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+
                 <input type="hidden" name="action" id="action" class="form-control validate" value="edit">
 
                 </div>

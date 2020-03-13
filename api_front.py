@@ -47,6 +47,7 @@ class Login(Resource):
 		user_id = {"username":info["username"], "password":info["password"]}
 		r = requests.post(api_backend + '/login', json=user_id, verify=False)
 
+
 		# Si les identifiants sont corrects, on enregistre le token dans un cookie 
 		# puis on redirige vers les données :
 		if "Token" in r.json():
@@ -92,7 +93,6 @@ class Data(Resource):
 
 		# Récupère le contenu de la réponse de la requête
 		data_get = r.json()
-
 		# Si des données ont bien été trouvées on les affiches 
 		if "data" in data_get:
 			data = data_get["data"]
@@ -167,7 +167,6 @@ class Data(Resource):
 				"contrib_path":data_form["contrib_path"],
 				"contrib_type":data_form["contrib_type"],
 				"dico_id":data_form["dico_id"],
-				"last_update":data_form["last_update"],
 				"ntealan":data_form["ntealan"],
 				"public_id":data_form["public_id"],
 				"user_id":data_form["user_id"],
