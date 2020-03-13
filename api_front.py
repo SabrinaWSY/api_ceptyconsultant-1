@@ -93,6 +93,8 @@ class Data(Resource):
 
 		# Récupère le contenu de la réponse de la requête
 		data_get = r.json()
+		print(data_get)
+
 		# Si des données ont bien été trouvées on les affiches 
 		if "data" in data_get:
 			data = data_get["data"]

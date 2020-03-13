@@ -2,13 +2,13 @@
 
 set -e
 
-# Création de l'nvironnement virtuel avec python 3
+# echo "Création de l'nvironnement virtuel avec python 3"
 # virtualenv --python=python3 venv-ceptyconsultant
 
-# Activation de l'environnement
+# echo "Activation de l'environnement"
 # source venv-ceptyconsultant/bin/activate
 
-# Installation des dépendances
+# echo "Installation des dépendances"
 # pip3 install -r requirements.txt
 
 # Instalation du fichier de configuration
@@ -22,7 +22,7 @@ edit_config() {
 	# ssl_certificate /etc/ssl/certs/localhost.crt;
 	# ssl_certificate_key /etc/ssl/private/localhost.key;
 	echo "voulez-vous utiliser les configurations par défaut ? (Y/N)"
-	echo "Si oui alors les configuration les configurations suivante seront utilisés :"
+	echo "Si oui alors les configurations suivantes seront utilisées :"
 	echo "ssl_certificate /etc/ssl/certs/localhost.crt"
 	echo "ssl_certificate_key /etc/ssl/private/localhost.key;"
 	echo "les fichiers localhost.crt et localhost.key seront copiés automatiquement"

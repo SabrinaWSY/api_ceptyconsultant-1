@@ -31,25 +31,25 @@ class User:
 			}
 
 
-def get_users(filename="LISTE_COLLABORATEURS.json"):
-	"""Lit le fichier contenant les données des utilisateurs et créé leurs identifants"""
+def get_users(filename="accounts.json"):
+	"""Crée les comptes utilisateur"""
 	with open(os.path.join("data", filename), "r", encoding="utf8") as data_file:
-		data = json.load(data_file)
+		accounts = json.load(data_file)
 	users = []
-	for user in data.values():
-		user = User(user["id"], user["nom"], generate_password_hash(user["prenom"]))
+	for account in accounts:
+		user = User(account["id"], account["username"], generate_password_hash(account["password"]))
 		users.append(user)
 	return users
-	# [User("cepty_001", "Bernard", "*******"), etc.]
 
 users = get_users()
 
 
-#key = 'ceptyconsultant'
+# la clé (très) secrête
 key = "\xd5PE\xa3t\x96D\xa2\xae\xc2\xcfIq\xe7\xefk"
 
+
 def make_token(user):
-		"""Génère le Auth Token """
+		"""Génère le auth token"""
 		encode_params = { 
 			"id": user.id,
 			"exp": datetime.datetime.utcnow()+\
@@ -57,7 +57,6 @@ def make_token(user):
 		}
 		try:
 			token = jwt.encode(encode_params, key, algorithm='HS256')
-			# print("token generated")
 			return token
 		except jwt.ExpiredSignatureError:
 			return "token expired!"
@@ -75,6 +74,8 @@ def verify_password(username:str, password:str):
 
 
 def token_required(f):
+	"""Crée le décorateur qui permettra de vérifier la présence
+	du token dans le header pour chaque requête""" 
 	@wraps(f)
 	def decorator(*args, **kwargs):
 		token = None
@@ -85,7 +86,6 @@ def token_required(f):
 		try:
 			data = jwt.decode(token, key)
 			current_user = data["id"]
-			#print(current_user)
 		except:
 			return {'message': 'token invalide'}
 		return f(current_user, *args, **kwargs)
@@ -96,14 +96,14 @@ def token_required(f):
 #========================================================================
 
 file_data = "DONNEES_CLIENT.json"
-# fonction de lecture
 def get_data(filename=file_data):
+	"""Retourne les données contenues dans notre fichier de données"""
 	with open(os.path.join("data", filename), "r", encoding="utf8") as data_file:
 		data = json.load(data_file)
 	return data
 
-# fonction d'écriture
 def save_data(data, filename=file_data):
+	""""Enregistre les nouvelles données dans notre fichier de données"""
 	with open(os.path.join("data", filename), "w", encoding="utf8") as data_file:
 		data_file.write(json.dumps(data, indent=4))
 
@@ -113,45 +113,50 @@ def save_data(data, filename=file_data):
 class Login(Resource):
 	"""Login"""
 	def post(self):
+		""""Crée le token d'un utilisateur si les informations reçues 
+		correspondent bien à un compte utilisateur"""
+
+		# On récupère les informations
 		info = request.json
+
+		# On vérifie que les identifiants correpondent à un utilisateur
+		# Si oui on crée le token, l'utilisateur correspondant et le token sont renvoyés
+		# Si non, une erreur est renvoyé
 		user = verify_password(info["username"],info["password"])
 		if user:
 			token = make_token(user)
-			#print(token)
 			return {'User':user.to_json(), 'Token': token.decode('UTF-8')}
-			#return redirect("/data", code=302)
 		else:
 			return {"ERROR":"Username ou mot de passe incorrect!"}, 400
 
 
 class Data(Resource):
-	"""Retourne le contenu du fichier json"""
+	"""Gère la manipulation des données"""
+
 	@token_required
 	def get(self, current_user, contrib_name=None, public_id=None):
+		"""Gère l'accès et le filtrage des données"""
+
 		data = get_data()
 		result = []
 
-		# user_search = request.args.get('user_search')
-		# if user_search:
-		# 	for d in data["contributions"]["data"]:
-		# 		if d["user_name"] == user_search: 
-		# 			result.append(d)
-		# 	res = {"data":result}, 200
-
-
-
+		# Renvoie toutes les données
 		if public_id==None and contrib_name==None:
 			result = data["contributions"]["data"]
 			res = {"data":result}, 200
-		
+
+		# Renvoie les données filtrées sur un contrib_name
+		# Si aucune données n'est trouvée une erreur est renvoyée
 		if public_id==None and contrib_name!=None:
 			for d in data["contributions"]["data"]:
 				if d["contrib_name"] == contrib_name: 
 					result.append(d)
 			if len(result) == 0:
-				res = {"ERROR":"aucune  données n'a été trouvée"}, 404
+				res = {"ERROR":"aucune données n'a été trouvée"}, 404
 			else : res = {"data":result}, 200
 
+		# Renvoie les données filtrées sur un contrib_name + public_id
+		# Si aucune données n'est trouvée une erreur est renvoyée
 		if public_id!=None and contrib_name!=None:
 			for d in data["contributions"]["data"]:
 				if d["contrib_name"] == contrib_name and d["public_id"] == public_id: 
@@ -161,15 +166,24 @@ class Data(Resource):
 			else : res = {"data":result}, 200
 		
 		return res
+		
 
 
 	@token_required
 	def put(self, current_user):
+		"""Ajoute des données"""
+
+		# On va chercher les données déjà existantes
 		data = get_data()
+
+		# On reçoit les informations à ajouter
+		# envoyées par l'utilisateur  
 		data_add = request.json
-		# TODO Ajouter des conditions pour vérifier que les données entrées
-		# ne rentrent pas en conflit avec les données du fichier json
-		# Actuellement la seule condition est l'article_id
+
+		# On suppose que l'article_id est unique, 
+		# on l'uitilise donc pour identifier les éléments
+		# Si l'article_id existe déjà on renvoie une erreur,
+		# sinon on peut ajouter les nouvelles données
 		list_id = [d["article_id"] for d in data["contributions"]["data"]]
 		if data_add["article_id"] in list_id:
 			res = {"ERROR": "article_id existe déjà"}, 400
@@ -184,12 +198,21 @@ class Data(Resource):
 
 	@token_required
 	def post(self, current_user):
-		print("TTTTTTTTTTTTTTTTESSSSSSSSSST")
+		"""Modifie des données"""
+
+		# On va chercher les données déjà existantes
 		data = get_data()
-		print("TTTTTTTTTTTTTTTTESSSSSSSSSST")
+
+		# On reçoit les informations à modifier
+		# envoyées par l'utilisateur  
 		data_edit = request.json
-		print(data_edit)
+
+		# On recupère l'article_id pour connaître l'élément à modifier
 		article_id = request.args.get('article_id')
+		
+		# On cherche l'élément correspondant à l'article_id
+		# Si on le trouve alors on le modifie avec les informations reçues,
+		# Sinon on retourne un erreur
 		for n, d in enumerate(data["contributions"]["data"]):
 			if d["article_id"] == article_id:
 				for key, value in data_edit.items():
@@ -202,10 +225,20 @@ class Data(Resource):
 		else : 
 			res = {"ERROR": "Article non trouvé"}, 404
 
+
 	@token_required
 	def delete(self, current_user):
+		"""Supprime des données"""
+
+		# On va chercher les données déjà existantes
 		data = get_data()
+
+		# On recupère l'article_id pour connaître l'élément à supprimer
 		article_id = request.args.get('article_id')
+
+		# On cherche l'élément correspondant à l'article_id
+		# Si on le trouve alors on le supprime,
+		# Sinon on retourne un erreur
 		for n, d in enumerate(data["contributions"]["data"]):
 			if d["article_id"] == article_id:
 				del data["contributions"]["data"][n]
@@ -216,9 +249,9 @@ class Data(Resource):
 			res = {"ERROR": "Article non trouvé"}, 404
 			return res
 
+
 api.add_resource(Login, "/", "/login")
 api.add_resource(Data, "/data","/data/<string:contrib_name>", "/data/<string:contrib_name>/<string:public_id>")
-
 
 if __name__ == '__main__':
 	app.run(debug=True)
