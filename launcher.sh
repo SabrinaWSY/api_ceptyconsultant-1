@@ -7,5 +7,5 @@
 
 set -e
 
-gunicorn -w 4 -b 127.0.0.1:5000 api_front:app &
-gunicorn -w 4 -b 127.0.0.1:8000 api_run:app &
+gunicorn -w 5 -b 127.0.0.1:5000 api_front:app &
+gunicorn -w 5 -b 127.0.0.1:8000 api_run:app &
