@@ -9,6 +9,13 @@
 
 ## Installation
 
+Créez l'environnement virtuel et activez-le (vivement recommandé)
+
+```Console
+virtualenv --python=python3 venv-ceptyconsultant
+source venv-ceptyconsultant/bin/activate
+```
+
 ```Console
 sudo sh install.sh
 ```
@@ -22,15 +29,13 @@ sudo sh launcher.sh
 ### Prérequis
 
 * **Python 3**
-* **virtualenv**
+* **virtualenv** (pas obligatoire mais vivement recommandé)
 * **Nginx** 
 
 
 ### Ce que fait l'installeur :
 
-
-1. **Crée et active l'environnement virtuel** avec virtualenv. Veuillez donc installer virtualenv avant avant d'effectuer l'installation de l'application
-2. **Installe les dépendances Python** dans le virtualenv
+2. **Installe les dépendances Python**
 3. **Configure Nginx** grâce au fichier *ceptyconsultant.conf*. Veuillez à installer Nginx avant l'installation  de l'application
 
 
