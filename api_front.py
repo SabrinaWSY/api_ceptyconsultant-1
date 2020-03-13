@@ -17,6 +17,7 @@ def _check_cookie_auth():
 	return token
 
 def _login_error():
+	""" Renvoie la page login_error.html """
 	render_response = render_template("login_error.html", message="Vous n'êtes pas connecté(e) !")
 	resp = Response(render_response, status=403, content_type="text/html")
 	return resp
