@@ -93,7 +93,7 @@ class Data(Resource):
 
 		# Récupère le contenu de la réponse de la requête
 		data_get = r.json()
-		print(data_get)
+		# print(data_get)
 
 		# Si des données ont bien été trouvées on les affiche
 		if "data" in data_get:
@@ -104,7 +104,7 @@ class Data(Resource):
 
 		# Si aucune donnée n'a été trouvée alors on prévient le client
 		elif data_get['ERROR'] == "Aucune donnée n'a été trouvée":
-			render_data = render_template("response.html", message="Aucune données n'a été trouvée", alert="warning")
+			render_data = render_template("response.html", message="Aucune donnée n'a été trouvée", alert="warning")
 			resp = Response(render_data, status=404, content_type="text/html")
 			return resp
 		
