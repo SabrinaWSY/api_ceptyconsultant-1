@@ -36,7 +36,7 @@ sudo sh launcher.sh
 
 ## Auteurs
 
-Nom | Contributions
+Nom | Contribution
 -|-
 Pierre ROCHET | back-end, front-end
 Siyu WANG | config nginx, front-end, doc client

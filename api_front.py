@@ -57,7 +57,7 @@ class Login(Resource):
 			return resp
 
 		# Si les identifiants sont incorrects :
-		elif r.json()["ERROR"] == "Username ou mot de passe incorrect!":
+		elif r.json()["ERROR"] == "Username ou mot de passe incorrect":
 			render_response = render_template("login_error.html", message="Identifiant ou mot de passe incorrect !")
 			resp = Response(render_response, status=403, content_type="text/html")
 			return resp
@@ -93,9 +93,9 @@ class Data(Resource):
 
 		# Récupère le contenu de la réponse de la requête
 		data_get = r.json()
-		print(data_get)
+		# print(data_get)
 
-		# Si des données ont bien été trouvées on les affiches 
+		# Si des données ont bien été trouvées on les affiche
 		if "data" in data_get:
 			data = data_get["data"]
 			render_data = render_template("data.html", data=data)
@@ -103,12 +103,10 @@ class Data(Resource):
 			return resp
 
 		# Si aucune donnée n'a été trouvée alors on prévient le client
-		elif data_get['ERROR'] == "aucune  données n'a été trouvée":
-			render_data = render_template("response.html", message="Aucune donnée n'a été trouvée.", alert="warning")
+		elif data_get['ERROR'] == "Aucune donnée n'a été trouvée":
+			render_data = render_template("response.html", message="Aucune donnée n'a été trouvée", alert="warning")
 			resp = Response(render_data, status=404, content_type="text/html")
 			return resp
-		
-
 		
 		
 	def post(self, contrib_name=None, public_id=None):
@@ -132,9 +130,10 @@ class Data(Resource):
 		if data_form['action'] == 'delete':
 			article_id = data_form["article_id"]
 			r = requests.delete(api_backend + '/data?article_id=' + article_id, headers=headers, verify=False)
-			render_response = render_template("response.html", message="Données supprimées avec succès !", alert="success")
-			resp = Response(render_response, status=200, content_type="text/html")
-			return resp
+			if r.json()["OK"] == "Article supprimé avec succés":
+				render_response = render_template("response.html", message="Données supprimées avec succès !", alert="success")
+				resp = Response(render_response, status=200, content_type="text/html")
+				return resp
 		
 		# Si une modification est demandée on récupère les données à modifier
 		# et l'article_id envoyés par le formulaire puis on effectue la modification
@@ -155,9 +154,10 @@ class Data(Resource):
 				"validate":data_form["validate"]
 			}
 			r = requests.post(api_backend + '/data?article_id=' + article_id, json=data_set_1, headers=headers, verify=False)
-			render_response = render_template("response.html", message="Données modifiées avec succès !", alert="success")
-			resp = Response(render_response, status=200, content_type="text/html")
-			return resp
+			if r.json()["OK"] == "Données modifées avec succès":
+				render_response = render_template("response.html", message="Données modifiées avec succès !", alert="success")
+				resp = Response(render_response, status=200, content_type="text/html")
+				return resp
 
 		# Si un ajout est demandé, on recupère les données envoyées par le formulaires 
 		# et on créé le nouvel élément grâce à la méthode put
@@ -176,9 +176,17 @@ class Data(Resource):
 				"validate":data_form["validate"]
 			}
 			r = requests.put(api_backend + '/data', json=data_set, headers=headers, verify=False)
-			render_response = render_template("response.html", message="Données ajoutées avec succès !", alert="success")
-			resp = Response(render_response, status=200, content_type="text/html")
-			return resp
+			# print(r.json())
+			if "ERROR" in r.json():
+				if r.json()["ERROR"] == "Article_id existe déjà":
+					render_response = render_template("response.html", message="L'article_id existe déjà, veuillez le modifier !", alert="danger")
+					resp = Response(render_response, status=200, content_type="text/html")
+					return resp
+
+			elif r.json()["OK"] == "Article ajouté avec succès":
+				render_response = render_template("response.html", message="Données ajoutées avec succès !", alert="success")
+				resp = Response(render_response, status=200, content_type="text/html")
+				return resp
 		
 		# Si une recherche est demandée on redirige vers la méthode get de data 
 		# avec une url personnalisée en fonction des données recherchées
@@ -188,6 +196,7 @@ class Data(Resource):
 			else : public_id  = data_form['public_id']
 			resp = redirect(url_for('data', contrib_name=contrib_name, public_id=public_id))
 			return resp
+
 
 
 class License(Resource):
