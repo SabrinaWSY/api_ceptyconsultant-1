@@ -2,30 +2,25 @@
 
 set -e
 
-# echo "Création de l'nvironnement virtuel avec python 3"
-# virtualenv --python=python3 venv-ceptyconsultant
+echo "--- Installation des dépendances"
+pip3 install -r requirements.txt
+echo
 
-# echo "Activation de l'environnement"
-# source venv-ceptyconsultant/bin/activate
-
-# echo "Installation des dépendances"
-# pip3 install -r requirements.txt
-
-# Instalation du fichier de configuration
+echo "--- Instalation du fichier de configuration"
 CONFIGFILE="ceptyconsultant.conf"
 CONFIGPATH="/etc/nginx/sites-enabled/$CONFIGFILE"
-
+echo
  
 edit_config() {
 	# Paramétrage SSL
 	# defaults paths in UBUNTU :
 	# ssl_certificate /etc/ssl/certs/localhost.crt;
 	# ssl_certificate_key /etc/ssl/private/localhost.key;
-	echo "voulez-vous utiliser les configurations par défaut ? (Y/N)"
+	echo "Voulez-vous utiliser les configurations par défaut ? (Y/N)"
 	echo "Si oui alors les configurations suivantes seront utilisées :"
 	echo "ssl_certificate /etc/ssl/certs/localhost.crt"
 	echo "ssl_certificate_key /etc/ssl/private/localhost.key;"
-	echo "les fichiers localhost.crt et localhost.key seront copiés automatiquement"
+	echo "Les fichiers localhost.crt et localhost.key seront copiés automatiquement"
 
 	read resp
 	
@@ -65,6 +60,7 @@ else
 	echo "Le fichier de configuration ceptyconsultant.conf existe déjà à l'emplacement :"
 	echo "/etc/nginx/sites-enabled/ceptyconsultant.conf"
 	read -p "Voulez-vous le remplacer ? (Y/N) : " resp
+	echo
 	# Si l'utilisateur souhaite modifier son fichier de config
 	if [ $resp = "Y" ]; then
 		edit_config
@@ -74,9 +70,10 @@ else
 	fi
 fi
 
+echo
 echo "Installation terminée"
 
-
+echo
 read -p "Voulez-vous démarrer l'application (Y/N) : " dem
 if [ $dem = "Y" ]; then
 	sh launcher.sh
