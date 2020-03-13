@@ -22,9 +22,9 @@
     "type": "",
     "url": "",
     "version": "0.0.0",
-    "filename": "./apidoc_front/main.js",
-    "group": "/Users/noah/MesDocuments/TAL/TAL_M2_INALCO/Semestre_2/technique_web/projet_groupe/front/apidoc_front/main.js",
-    "groupTitle": "/Users/noah/MesDocuments/TAL/TAL_M2_INALCO/Semestre_2/technique_web/projet_groupe/front/apidoc_front/main.js",
+    "filename": "./doc_front/main.js",
+    "group": "/Users/noah/MesDocuments/TAL/TAL_M2_INALCO/Semestre_2/technique_web/projet_groupe/front/doc_front/main.js",
+    "groupTitle": "/Users/noah/MesDocuments/TAL/TAL_M2_INALCO/Semestre_2/technique_web/projet_groupe/front/doc_front/main.js",
     "name": ""
   },
   {
@@ -118,6 +118,12 @@
             "optional": false,
             "field": "login_error",
             "description": "<p>connection échoué.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "data_error",
+            "description": "<p>article_id existe déjà.</p>"
           }
         ]
       }

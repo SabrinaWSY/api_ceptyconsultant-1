@@ -5,7 +5,7 @@
   "title": "api_front",
   "url": "https://github.com/pierrerochet/api_ceptyconsultant",
   "header": {
-    "title": "l'entête de doc",
+    "title": "L'entête de doc",
     "content": "<p>Un projet réalisé par Pierre, Siyu, Alexander, Chen, Shuai.</p>\n"
   },
   "footer": {
@@ -17,7 +17,7 @@
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-03-13T18:12:33.653Z",
+    "time": "2020-03-13T19:12:02.414Z",
     "url": "http://apidocjs.com",
     "version": "0.20.0"
   }

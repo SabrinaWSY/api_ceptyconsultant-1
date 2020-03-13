@@ -1,0 +1,744 @@
+define({ "api": [
+  {
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "varname1",
+            "description": "<p>No type.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "varname2",
+            "description": "<p>With type.</p>"
+          }
+        ]
+      }
+    },
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "./apidoc_back/main.js",
+    "group": "/Users/noah/MesDocuments/TAL/TAL_M2_INALCO/Semestre_2/technique_web/projet_groupe/back/apidoc_back/main.js",
+    "groupTitle": "/Users/noah/MesDocuments/TAL/TAL_M2_INALCO/Semestre_2/technique_web/projet_groupe/back/apidoc_back/main.js",
+    "name": ""
+  },
+  {
+    "type": "DELETE",
+    "url": "/Data/delete",
+    "title": "la fonction \"delete\"",
+    "name": "DataDelete",
+    "group": "ClassData",
+    "description": "<p>c'est une fonction qui permet aux utilisateurs de supprimer les unités de données déjà existantes, article_id est la clé.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "Objet",
+            "description": "<p>current_user pas de description</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "res",
+            "description": "<p>s'il a trouvé article_id, il supprime l'unité de données depuis le fichier json et renvoie un message de succès.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": "{\"OK\": \"Article supprimé avec succés\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Article_id",
+            "description": "<p>article_id s'il ne trouve pas article_id, il renvoie un message d'erreur.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response: ",
+          "content": "{\"ERROR\": \"Article non trouvé\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "ClassData"
+  },
+  {
+    "type": "Get",
+    "url": "/Data/post",
+    "title": "fonction \"get\"",
+    "name": "DataGet",
+    "group": "ClassData",
+    "description": "<p>renvoie les datas requis en format json</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Objet",
+            "optional": false,
+            "field": "current_user",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "contrib_name",
+            "description": "<p>par défaut c'est un &quot;None&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "public_id",
+            "description": "<p>par défaut &quot;None&quot;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "res1",
+            "description": "<p>si public_id == None, et contrib_name == None, il renvoie tous les datas</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "res2",
+            "description": "<p>si public_id == None, et contrib_name != None, il renvoie tous les datas de contrib_name</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "res3",
+            "description": "<p>si contrib_name != None, et public_id != None, il renvoie le data qui correspond à ce public_id</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response1: ",
+          "content": "        {\n\"data\": \"{data requis}\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Success-Response2: ",
+          "content": "        {\n\"data\": \"{tous les datas de contrib_name}\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Success-Response3: ",
+          "content": "       {\"data\" : {\n                \"article_id\": \"2395b25e-2164-4c7d-a685-54a6c6e91f0d\",\n                \"contrib_data\": \"ami-2395b25e-2164-4c7d-a685-54a6c6e91f0d_2-2019-09-23T110024.158Z-.wav\",\n                \"contrib_name\": \"a\",\n                \"contrib_path\": \"https://ntealan.net/soundcontrib/\",\n                \"contrib_type\": \"sound\",\n                \"dico_id\": \"yb_fr_3031\",\n                \"last_update\": \"2020-03-11 10:00:22.925705\",\n                \"ntealan\": \"True\",\n                \"public_id\": \"df90c2c6-4b3e-4ede-a281-776efd498212\",\n                \"user_id\": \"b42e96a8-7b0b-8b45-ae69-7c2efd472e1d\",\n                \"user_name\": \"Mikolov\",\n                \"validate\": \"False\"\n            }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "contrib_name_introuvable",
+            "description": "<p>ce contrib_name n'existe pas.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "contrib_name_ou_public_id_introuvable",
+            "description": "<p>le contrib_name ou le public_id que t'as saisis n'existe pas.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response: ",
+          "content": "{\"ERREUR\":\"contrib_name introuvable\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "ClassData"
+  },
+  {
+    "type": "Post",
+    "url": "/Data/post",
+    "title": "fonction \"post\"",
+    "name": "DataPost",
+    "group": "ClassData",
+    "description": "<p>permet aux utilisateurs de modifier les unités de donnés déjà existantes, article_id est la clé.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Objet",
+            "optional": false,
+            "field": "current_user",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "res",
+            "description": "<p>si article_id existe, il écrit le contenu modifié dans le fichier json en écrasant l'anciennes données de cette unité.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": "{\"OK\": \"Données modifées avec succès\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Article_id",
+            "description": "<p>article_id si il ne trouve pas article_id, il renvoie un message d'erreur</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response: ",
+          "content": "{\"ERROR\": \"Article non trouvé\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "ClassData"
+  },
+  {
+    "type": "Get",
+    "url": "/Data/put",
+    "title": "fonction \"put\"",
+    "name": "DataPut",
+    "group": "ClassData",
+    "description": "<p>permet à l'utilisateur d'ajouter les données avec article_id comme la clé.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Objet",
+            "optional": false,
+            "field": "current_user",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "res",
+            "description": "<p>si il n'y a pas d'article_id comme clé, on écrit les données dans le fichier json.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": "{\"OK\": \"Article ajouté avec succès\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Article_id",
+            "description": "<p>article_id si article_id existe déjà, on renvoie une erreur.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response: ",
+          "content": "{\"ERROR\": \"article_id existe déjà\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "ClassData"
+  },
+  {
+    "type": "Post",
+    "url": "/Login/post",
+    "title": "fonction \"post\"",
+    "name": "LoginPost",
+    "group": "ClassLogin",
+    "description": "<p>elle récupère ce qui est saisi par l'utilisateur puis si pas de problème, il génère un token et renvoie un message au format json.</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": ""
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": "{\n'User': \"username\", \"id\", \"passoword\"\n'Token': \"une chaîne de caractère\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Incorrect",
+            "description": "<p>incorrection de username ou du mot de passe.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response: ",
+          "content": "{\"ERREUR\":\"Username ou mot de passe incorrect!\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "ClassLogin"
+  },
+  {
+    "type": "post",
+    "url": "/User/:id",
+    "title": "Class User : Créer un utilisateur.",
+    "name": "User",
+    "group": "ClassUser",
+    "description": "<p>class User : pour construire un objet user.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "cepty_id",
+            "description": "<p>id de l'utilisateur</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>le nom d'utilisateur</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>le password d'utilisateur</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "ClassUser"
+  },
+  {
+    "type": "get",
+    "url": "/User/to_json/:id",
+    "title": "les infos d'un user",
+    "name": "to_json",
+    "group": "ClassUser",
+    "description": "<p>fonction pour transformer les données en format json pour que les données puissent être envoyé au navigateur proprement.</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "User.id",
+            "description": "<p>id de l'utilisateur</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "User.username",
+            "description": "<p>le nom d'utilisateur</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "User.password",
+            "description": "<p>le password d'utilisateur</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": " \t{\n\"cepytu_id\": \"CEPTY_001\",\n        \"username\": \"Mikolov\",\n        \"password\": \"Thomas\"\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "ClassUser"
+  },
+  {
+    "type": "Get",
+    "url": "/get_data/:id",
+    "title": "fonction pour lire un fichier json et récupérer les datas",
+    "name": "GetData",
+    "group": "Main",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "le",
+            "description": "<p>nom de fichier à lire</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "data",
+            "description": "<p>les infos en format json</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "Main"
+  },
+  {
+    "type": "Get",
+    "url": "/get_users/:id",
+    "title": "Request User information",
+    "name": "GetUsers",
+    "group": "Main",
+    "description": "<p>pour récupérer tous les collaborateurs depuis le fichier .json</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "filename",
+            "description": "<p>le nom du fichier json que tu veux entrer</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "User",
+            "description": "<p>une liste des objets de Class User</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "User.id",
+            "description": "<p>id de l'utilisateur</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "User.username",
+            "description": "<p>le nom d'utilisateur</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "User.password",
+            "description": "<p>le password d'utilisateur</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": "[User(\"cepty_001\", \"Bernard\", \"*******\"), etc.]",
+          "type": "Objet[]"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "Main"
+  },
+  {
+    "type": "Get",
+    "url": "/make_token/:id",
+    "title": "Génère le Auth Token",
+    "name": "MakeToken",
+    "group": "Main",
+    "description": "<p>générer un token d'authentification pour une connection sécurisée.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Objet",
+            "optional": false,
+            "field": "user",
+            "description": "<p>un objet de class User</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Objet",
+            "optional": false,
+            "field": "token",
+            "description": "<p>objet créé par le module jwt</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "jwt.ExpiredSignatureError",
+            "description": "<p>token a expiré dans 30 minutes.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response: ",
+          "content": "token expired!",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "Main"
+  },
+  {
+    "type": "Post",
+    "url": "/save_data/:id",
+    "title": "fonction d'écrire",
+    "name": "SaveData",
+    "group": "Main",
+    "description": "<p>la fonction d'écrire dans le même fichier &quot;DONNEES_CLIENT.json&quot;</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "json",
+            "optional": false,
+            "field": "data",
+            "description": "<p>data obetenu par la méthode get_data</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "filename",
+            "description": "<p>fichier à lire</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "Main"
+  },
+  {
+    "type": "get",
+    "url": "/token_required",
+    "title": "fonction token_required",
+    "name": "TokenRequired",
+    "group": "Main",
+    "description": "<p>il vérifie s'il y a un token dans le headers.</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Objet",
+            "optional": false,
+            "field": "si",
+            "description": "<p>vérification avec succes, on le décode.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "token_manquant",
+            "description": "<p>si token ne se trouve pas dans le headers.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "token_invalide",
+            "description": "<p>si le résultat de décodage n'est pas égale à user_id, token invalide.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response1: ",
+          "content": "{'message': 'token manquant'}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response2: ",
+          "content": "{'message': 'token invalide'}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "Main"
+  },
+  {
+    "type": "Get",
+    "url": "/verify_password/:id",
+    "title": "Vérifie que les identifiants de l'utilisateur sont corrects",
+    "name": "VerifyPassword",
+    "group": "Main",
+    "description": "<p>verify_password: Vérifie que les identifiants de l'utilisateur sont corrects</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>le nom d'utilisateur</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>le password d'utilisateur</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Objet",
+            "optional": false,
+            "field": "si",
+            "description": "<p>vérification succes, un objet(user) de la classe User, sinon on renvoie un &quot;False&quot;.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./api_run.py",
+    "groupTitle": "Main"
+  }
+] });
